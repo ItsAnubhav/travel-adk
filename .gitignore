@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.env
+channel_gateway/.env
+*.pyc
+*.db
+node_modules/
+frontend/dist/
+.DS_Store
+payload_store/

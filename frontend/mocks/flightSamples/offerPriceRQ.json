@@ -1,0 +1,929 @@
+{
+	"offerPriceRQ": {
+		"header": {
+			"salesChannel": "BO-CA",
+			"userId": "5992",
+			"branchId": "1386",
+			"userSearchLocation": "AE",
+			"userDeviceLocation": "",
+			"userDeviceIP": "192.168.111.49",
+			"userMacAddress": "2CFDA1703B60",
+			"websiteDomain": "https://Xchange-erp1/",
+			"browserAgentData": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+			"languageCode": "GB",
+			"websiteId": "",
+			"GUID": "6c4277dc-3853-45e3-bb26-672b62b0102b",
+			"flexi": false,
+			"companyId": "Qlabs12345",
+			"client": {
+				"id": "150218",
+				"userID": "305354",
+				"branchId": "95775",
+				"customerNationality": "AE",
+				"customerCountryOfResidence": "AE",
+				"customerRequestedCurrency": "AED",
+				"corporateAgent": true,
+				"corporate": {
+					"tripType": "BTC",
+					"travelCategory": "Travel Test - FlightPolicy",
+					"travelPolicyId": "20303"
+				}
+			}
+		},
+		"distributionChain": {
+			"distributionChainLink": [
+				{
+					"orgRole": "Supplier",
+					"participatingOrg": {
+						"orgId": "4188"
+					}
+				}
+			]
+		},
+		"request": {
+			"dataLists": {
+				"baggageAllowanceList": {
+					"baggageAllowance": [
+						{
+							"baggageAllowanceID": "BA39",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "1P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA12",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA33",
+							"typeCode": "checkin"
+						},
+						{
+							"baggageAllowanceID": "BA18",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "1P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA10",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA1",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA24",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "1P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA37",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA6",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "1P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA25",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA27",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA23",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "25",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA44",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "30",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA2",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "35",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA21",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "40",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA14",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "25",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA5",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "35",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA8",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "30",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA36",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "40",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA13",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "50",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA11",
+							"typeCode": "checkin"
+						},
+						{
+							"baggageAllowanceID": "BA16",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA3",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA43",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "1P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA28",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA30",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "1P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA29",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA17",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "1P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA20",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA34",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA4",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "30",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA35",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "40",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA31",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA15",
+							"typeCode": "checkin"
+						},
+						{
+							"baggageAllowanceID": "BA41",
+							"typeCode": "checkin",
+							"pieceAllowance": {
+								"totalQty": "2P"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA22",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "35",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA32",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "40",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA19",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "50",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA9",
+							"typeCode": "checkin"
+						},
+						{
+							"baggageAllowanceID": "BA42",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "30",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA38",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "35",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA40",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "40",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA7",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "50",
+								"weightUnitOfMeasurement": "kg"
+							}
+						},
+						{
+							"baggageAllowanceID": "BA26",
+							"typeCode": "checkin",
+							"weightAllowance": {
+								"maximumWeightMeasure": "60",
+								"weightUnitOfMeasurement": "kg"
+							}
+						}
+					]
+				},
+				"paxList": {
+					"Adult": 1,
+					"Child": 1,
+					"Infant": 0,
+					"Youth": 0,
+					"Senior": 0,
+					"pax": [
+						{
+							"paxId": "PAX1",
+							"ptc": "ADT"
+						},
+						{
+							"paxId": "PAX2",
+							"ptc": "CHD"
+						},
+						{
+							"paxId": "PAX3",
+							"ptc": "INF"
+						}
+					]
+				},
+				"priceClassList": {
+					"priceClass": {
+						"cabinType": {
+							"cabinTypeCode": "EC"
+						}
+					}
+				}
+			},
+			"paymentFunctions": [
+				{
+					"paymentMethodCriteria": {
+						"paymentTypeCode": "CC",
+						"paymentCriteriaAddlInfo": {
+							"paymentCardCriteriaAddlInfo": {
+								"cardTypeText": "Credit Card",
+								"cardCodeText": "",
+								"cardMerchantId": "",
+								"cardPGId": ""
+							}
+						}
+					}
+				},
+				{
+					"paymentMethodCriteria": {
+						"paymentTypeCode": "CA"
+					}
+				}
+			],
+			"pricedOffer": {
+				"selectedOfferList": {
+					"selectedOffer": [
+						{
+							"offerID": "1-4188-1",
+							"ownerId": "4188",
+							"ownerCode": "1S",
+							"validatingCarrierCode": "AY",
+							"offerItem": {
+								"fareDetail": [
+									{
+										"offerItemID": "F1",
+										"fareType": "PUB",
+										"brandId": "ECLASSIC",
+										"cabinClass": "Economy",
+										"fareSource": "CRS",
+										"corpCode": "",
+										"promoCode": "",
+										"brandName": "ECONOMY CLASSIC",
+										"fareComponent": {
+											"price": {
+												"totalAmount": "4707.96",
+												"totalTaxAmount": "1667.61"
+											},
+											"rbd": [
+												"Z",
+												"Z",
+												"Z",
+												"Z"
+											],
+											"displayLtDt": "2026-05-16",
+											"refundable": "False",
+											"fareSellkey": "ce79b9bcf4fdmnx6cmp40uixe0-1",
+											"segSellKey": "ce79b9bcf4fdmnx6cmp40uixe0-1-1",
+											"supplierVATInclusive": false,
+											"paxType": [
+												{
+													"type": "ADT",
+													"fareBasisCode": [
+														"ZNN0S2CM",
+														"ZNN0S2CM"
+													],
+													"baseAmount": "1737.37",
+													"tax": "1125.23",
+													"yq": "142.76",
+													"yr": "0",
+													"jn": "0",
+													"taxSummary": {
+														"totalTaxAmount": "1125.23",
+														"tax": [
+															{
+																"taxCode": "YQ",
+																"taxName": "SERVICE FEE - CARRIER-IMPOSED MISC",
+																"suppAmount": "3362",
+																"amount": "142.76",
+																"suppTax": false
+															},
+															{
+																"taxCode": "K3",
+																"taxName": "GOODS AND SERVICE TAX INTERIM DOMESTIC AND INTERNATIONAL",
+																"suppAmount": "2214",
+																"amount": "94.01",
+																"suppTax": false
+															},
+															{
+																"taxCode": "IN",
+																"taxName": "USER DEVELOPMENT FEE DEPARTURES",
+																"suppAmount": "1092",
+																"amount": "46.37",
+																"suppTax": false
+															},
+															{
+																"taxCode": "DQ",
+																"taxName": "SECURITY CHARGE",
+																"suppAmount": "703",
+																"amount": "29.85",
+																"suppTax": false
+															},
+															{
+																"taxCode": "XU",
+																"taxName": "AIR TRANSPORT SUPERVISION CHARGE",
+																"suppAmount": "202",
+																"amount": "8.58",
+																"suppTax": false
+															},
+															{
+																"taxCode": "WL",
+																"taxName": "PASSENGER FEE  INTERNATIONAL TRANSFER",
+																"suppAmount": "1376",
+																"amount": "58.43",
+																"suppTax": false
+															},
+															{
+																"taxCode": "GB",
+																"taxName": "AIR PASSENGER DUTY APD",
+																"suppAmount": "13215",
+																"amount": "561.15",
+																"suppTax": false
+															},
+															{
+																"taxCode": "UB",
+																"taxName": "PASSENGER SERVICE CHARGE DEPARTURES",
+																"suppAmount": "2987",
+																"amount": "126.84",
+																"suppTax": false
+															},
+															{
+																"taxCode": "P2",
+																"taxName": "AVIATION SECURITY FEE",
+																"suppAmount": "1348",
+																"amount": "57.24",
+																"suppTax": false
+															}
+														]
+													},
+													"transFee": {
+														"amt": "0.00",
+														"apiTransFee": "0.00"
+													}
+												},
+												{
+													"type": "CHD",
+													"fareBasisCode": [
+														"ZNN0S2CM/CH",
+														"ZNN0S2CM/CH"
+													],
+													"baseAmount": "1302.98",
+													"tax": "542.38",
+													"yq": "142.76",
+													"yr": "0",
+													"jn": "0",
+													"taxSummary": {
+														"totalTaxAmount": "542.38",
+														"tax": [
+															{
+																"taxCode": "YQ",
+																"taxName": "SERVICE FEE - CARRIER-IMPOSED MISC",
+																"suppAmount": "3362",
+																"amount": "142.76",
+																"suppTax": false
+															},
+															{
+																"taxCode": "K3",
+																"taxName": "GOODS AND SERVICE TAX INTERIM DOMESTIC AND INTERNATIONAL",
+																"suppAmount": "1703",
+																"amount": "72.31",
+																"suppTax": false
+															},
+															{
+																"taxCode": "IN",
+																"taxName": "USER DEVELOPMENT FEE DEPARTURES",
+																"suppAmount": "1092",
+																"amount": "46.37",
+																"suppTax": false
+															},
+															{
+																"taxCode": "DQ",
+																"taxName": "SECURITY CHARGE",
+																"suppAmount": "703",
+																"amount": "29.85",
+																"suppTax": false
+															},
+															{
+																"taxCode": "XU",
+																"taxName": "AIR TRANSPORT SUPERVISION CHARGE",
+																"suppAmount": "202",
+																"amount": "8.58",
+																"suppTax": false
+															},
+															{
+																"taxCode": "WL",
+																"taxName": "PASSENGER FEE  INTERNATIONAL TRANSFER",
+																"suppAmount": "1376",
+																"amount": "58.43",
+																"suppTax": false
+															},
+															{
+																"taxCode": "UB",
+																"taxName": "PASSENGER SERVICE CHARGE DEPARTURES",
+																"suppAmount": "2987",
+																"amount": "126.84",
+																"suppTax": false
+															},
+															{
+																"taxCode": "P2",
+																"taxName": "AVIATION SECURITY FEE",
+																"suppAmount": "1348",
+																"amount": "57.24",
+																"suppTax": false
+															}
+														]
+													},
+													"transFee": {
+														"amt": "0.00",
+														"apiTransFee": "0.00"
+													}
+												}
+											],
+											"autoCharges": {
+												"grandTotal": "304",
+												"charge": [
+													{
+														"code": "TFEE",
+														"name": "CorpTransactionFee",
+														"operator": "+",
+														"isSupplierFee": "False",
+														"mergeWith": "",
+														"applyOn": "Base Fare",
+														"dbAmount": {
+															"type": "Percent",
+															"value": "10"
+														},
+														"total": {
+															"net": "0.00",
+															"b2bNet": "304",
+															"gross": "304"
+														},
+														"adult": {
+															"net": "0.00",
+															"b2bNet": "174",
+															"gross": "174"
+														},
+														"child": {
+															"net": "0.00",
+															"b2bNet": "130",
+															"gross": "130"
+														}
+													}
+												]
+											},
+											"taxCharges": {
+												"title": "GST",
+												"net": "0",
+												"b2bNet": "501",
+												"gross": "501",
+												"pax": [
+													{
+														"type": "ADT",
+														"net": "0.00",
+														"b2bNet": "304.00",
+														"gross": "304.00",
+														"tax": [
+															{
+																"taxScope": "OOS",
+																"code": "",
+																"type": "I",
+																"mergeWith": "",
+																"applyOn": "Fare",
+																"value": "0.00",
+																"net": "0.00",
+																"b2bNet": "0.00",
+																"gross": "0.00"
+															},
+															{
+																"taxScope": "APP",
+																"code": "VAT STD OUT",
+																"type": "O",
+																"mergeWith": "TAX",
+																"applyOn": "Tax",
+																"value": "10.0000",
+																"net": "0.00",
+																"b2bNet": "113",
+																"gross": "113"
+															},
+															{
+																"taxScope": "APP",
+																"code": "VAT STD OUT",
+																"type": "O",
+																"mergeWith": "FARE",
+																"applyOn": "Fare",
+																"value": "10.0000",
+																"net": "0.00",
+																"b2bNet": "174",
+																"gross": "174"
+															},
+															{
+																"taxScope": "APP",
+																"code": "VAT STD OUT",
+																"type": "O",
+																"mergeWith": "",
+																"applyOn": "TFEE",
+																"value": "10.0000",
+																"net": "0.00",
+																"b2bNet": "17",
+																"gross": "17"
+															}
+														]
+													},
+													{
+														"type": "CHD",
+														"net": "0.00",
+														"b2bNet": "197.00",
+														"gross": "197.00",
+														"tax": [
+															{
+																"taxScope": "OOS",
+																"code": "",
+																"type": "I",
+																"mergeWith": "",
+																"applyOn": "Fare",
+																"value": "0.00",
+																"net": "0.00",
+																"b2bNet": "0.00",
+																"gross": "0.00"
+															},
+															{
+																"taxScope": "APP",
+																"code": "VAT STD OUT",
+																"type": "O",
+																"mergeWith": "TAX",
+																"applyOn": "Tax",
+																"value": "10.0000",
+																"net": "0.00",
+																"b2bNet": "54",
+																"gross": "54"
+															},
+															{
+																"taxScope": "APP",
+																"code": "VAT STD OUT",
+																"type": "O",
+																"mergeWith": "FARE",
+																"applyOn": "Fare",
+																"value": "10.0000",
+																"net": "0.00",
+																"b2bNet": "130",
+																"gross": "130"
+															},
+															{
+																"taxScope": "APP",
+																"code": "VAT STD OUT",
+																"type": "O",
+																"mergeWith": "",
+																"applyOn": "CCCHG",
+																"value": "10.0000",
+																"net": "0.00",
+																"b2bNet": "0",
+																"gross": "0"
+															},
+															{
+																"taxScope": "APP",
+																"code": "VAT STD OUT",
+																"type": "O",
+																"mergeWith": "",
+																"applyOn": "TFEE",
+																"value": "10.0000",
+																"net": "0.00",
+																"b2bNet": "13",
+																"gross": "13"
+															}
+														]
+													}
+												]
+											}
+										},
+										"miscInfo": {
+											"noOfSeats": "4",
+											"specialServices": [
+												{
+													"jDirection": {
+														"segment": "DEL-LHR",
+														"serviceRef": "4188_0"
+													}
+												},
+												{
+													"jDirection": {
+														"segment": "LHR-DEL",
+														"serviceRef": "4188_0"
+													}
+												}
+											]
+										},
+										"baggageAssociations": {
+											"segment": [
+												{
+													"baggageAllowanceRefID": "BA39",
+													"offerFlightAssociations": {
+														"segmentReferences": {
+															"segmentRefID": "SEG1"
+														}
+													},
+													"paxRefID": [
+														"PAX1",
+														"PAX2"
+													]
+												},
+												{
+													"baggageAllowanceRefID": "BA39",
+													"offerFlightAssociations": {
+														"segmentReferences": {
+															"segmentRefID": "SEG2"
+														}
+													},
+													"paxRefID": [
+														"PAX1",
+														"PAX2"
+													]
+												},
+												{
+													"baggageAllowanceRefID": "BA39",
+													"offerFlightAssociations": {
+														"segmentReferences": {
+															"segmentRefID": "SEG3"
+														}
+													},
+													"paxRefID": [
+														"PAX1",
+														"PAX2"
+													]
+												},
+												{
+													"baggageAllowanceRefID": "BA39",
+													"offerFlightAssociations": {
+														"segmentReferences": {
+															"segmentRefID": "SEG4"
+														}
+													},
+													"paxRefID": [
+														"PAX1",
+														"PAX2"
+													]
+												}
+											]
+										}
+									}
+								]
+							},
+							"segmentList": {
+								"segments": [
+									{
+										"segmentInfo": [
+											{
+												"segmentID": "SEG1",
+												"segmentSellKey": "55",
+												"departureDate": "2026-07-23",
+												"departureTime": "07:40",
+												"arrivalDate": "2026-07-23",
+												"arrivalTime": "14:25",
+												"departureAirport": "DEL",
+												"arrivalAirport": "HEL",
+												"airline": "AY",
+												"marketingAirline": "AY",
+												"operatingAirline": "AY",
+												"flightNumber": "122",
+												"airCraftType": "333",
+												"noOfStops": "0",
+												"departureTerminal": "3",
+												"duration": "0915"
+											},
+											{
+												"segmentID": "SEG2",
+												"segmentSellKey": "57",
+												"departureDate": "2026-07-23",
+												"departureTime": "16:00",
+												"arrivalDate": "2026-07-23",
+												"arrivalTime": "17:05",
+												"departureAirport": "HEL",
+												"arrivalAirport": "LHR",
+												"airline": "AY",
+												"marketingAirline": "AY",
+												"operatingAirline": "AY",
+												"flightNumber": "1337",
+												"airCraftType": "359",
+												"noOfStops": "0",
+												"arrivalTerminal": "3",
+												"duration": "0305"
+											}
+										]
+									},
+									{
+										"segmentInfo": [
+											{
+												"segmentID": "SEG3",
+												"segmentSellKey": "79",
+												"departureDate": "2026-07-27",
+												"departureTime": "07:30",
+												"arrivalDate": "2026-07-27",
+												"arrivalTime": "12:15",
+												"departureAirport": "LHR",
+												"arrivalAirport": "HEL",
+												"airline": "AY",
+												"marketingAirline": "AY",
+												"operatingAirline": "AY",
+												"flightNumber": "1340",
+												"airCraftType": "32B",
+												"noOfStops": "0",
+												"departureTerminal": "3",
+												"duration": "0245"
+											},
+											{
+												"segmentID": "SEG4",
+												"segmentSellKey": "37",
+												"departureDate": "2026-07-27",
+												"departureTime": "18:30",
+												"arrivalDate": "2026-07-28",
+												"arrivalTime": "05:20",
+												"departureAirport": "HEL",
+												"arrivalAirport": "DEL",
+												"airline": "AY",
+												"marketingAirline": "AY",
+												"operatingAirline": "AY",
+												"flightNumber": "121",
+												"airCraftType": "333",
+												"noOfStops": "0",
+												"arrivalTerminal": "3",
+												"duration": "0820"
+											}
+										]
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		}
+	}
+}

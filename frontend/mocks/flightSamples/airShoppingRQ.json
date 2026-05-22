@@ -1,0 +1,178 @@
+{
+	"airShoppingRq": {
+		"marketType": "International",
+		"journeyDir": "RT",
+		"journeyType": "IN",
+		"header": {
+			"salesChannel": "BO-CA",
+			"userId": "5992",
+			"branchId": "1386",
+			"userSearchLocation": "AE",
+			"userDeviceLocation": "",
+			"userDeviceIp": "192.168.111.49",
+			"userMacAddress": "2CFDA1703B60",
+			"websiteDomain": "https://Xchange-erp1/",
+			"browserAgentData": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+			"languageCode": "GB",
+			"websiteId": "",
+			"flexi": false,
+			"companyId": "Qlabs12345",
+			"client": {
+				"id": "150218",
+				"userId": "305354",
+				"branchId": "95775",
+				"customerNationality": "AE",
+				"customerCountryOfResidence": "AE",
+				"customerRequestedCurrency": "AED",
+				"corporateAgent": true,
+				"corporate": {
+					"tripType": "BTC",
+					"travelCategory": "Travel Test - FlightPolicy",
+					"travelPolicyId": "20303"
+				}
+			}
+		},
+		"distributionChain": {
+			"distributionChainLink": [
+				{
+					"orgRole": "Supplier",
+					"participatingOrg": {
+						"orgId": "4188"
+					}
+				}
+			]
+		},
+		"request": {
+			"flightRequest": {
+				"flightRequestOriginDestinationsCriteria": {
+					"originDestCriteria": [
+						{
+							"originDestId": "OD1",
+							"destArrivalCriteria": {
+								"locationCode": "LHR",
+								"countryCode": "GB",
+								"locationType": "A"
+							},
+							"originDepCriteria": {
+								"locationCode": "DEL",
+								"countryCode": "IN",
+								"locationType": "A",
+								"date": "2026-07-23",
+								"time": ""
+							}
+						},
+						{
+							"originDestId": "OD2",
+							"destArrivalCriteria": {
+								"locationCode": "DEL",
+								"locationType": "A"
+							},
+							"originDepCriteria": {
+								"locationCode": "LHR",
+								"locationType": "A",
+								"date": "2026-07-27",
+								"time": ""
+							}
+						}
+					]
+				}
+			},
+			"paxList": {
+				"Adult": 1,
+				"Child": 0,
+				"Infant": 0,
+				"Youth": 0,
+				"Senior": 0,
+				"pax": [
+					{
+						"paxId": "PAX1",
+						"ptc": "ADT"
+					}
+				]
+			},
+			"flightRelatedCriteria": {
+				"cabinCriteria": [
+					{
+						"cabinTypeCode": "3",
+						"prefLevel": {
+							"prefLevelCode": "Preferred"
+						}
+					}
+				],
+				"carrierCriteria": [
+					{
+						"carrier": {
+							"airlineDesigCode": "EK"
+						},
+						"prefLevel": {
+							"prefLevelCode": "Preferred"
+						}
+					},
+					{
+						"carrier": {
+							"airlineDesigCode": "WY"
+						},
+						"prefLevel": {
+							"prefLevelCode": "Preferred"
+						}
+					}
+				],
+				"flightCriteria": [
+					{
+						"flightCharacteristicsCriteria": [
+							{
+								"characteristicCode": "DIRECT",
+								"prefLevel": {
+									"prefLevelCode": "Preferred"
+								}
+							},
+							{
+								"characteristicCode": "NONSTOP",
+								"prefLevel": {
+									"prefLevelCode": "Preferred"
+								}
+							}
+						]
+					}
+				]
+			},
+			"offerCriteria": {
+				"fareCriteria": [
+					{
+						"fareTypeCode": [
+							"PUBLIC",
+							"PRIVATE",
+							"NEGOTIATED",
+							"TOUR"
+						]
+					}
+				]
+			},
+			"paymentFunctions": [
+				{
+					"paymentMethodCriteria": {
+						"paymentTypeCode": "CC",
+						"paymentCriteriaAddlInfo": {
+							"paymentCardCriteriaAddlInfo": {
+								"cardTypeText": "Credit Card",
+								"cardCodeText": "VI/CA",
+								"cardMerchantId": "2396",
+								"cardPgId": "291"
+							}
+						}
+					}
+				},
+				{
+					"paymentMethodCriteria": {
+						"paymentTypeCode": "CA"
+					}
+				}
+			]
+		},
+		"bundledTrans": {
+			"isBundledTrans": false,
+			"primaryProduct": "",
+			"bundleProductType": ""
+		}
+	}
+}

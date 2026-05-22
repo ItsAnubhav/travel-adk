@@ -1,0 +1,1 @@
+"""ADK travel agents application."""

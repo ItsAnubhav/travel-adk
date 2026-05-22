@@ -1,0 +1,782 @@
+{
+  "orderCreateRQ": {
+    "header": {
+      "salesChannel": "BO-CA",
+      "userId": "5992",
+      "branchId": "1386",
+      "userSearchLocation": "AE",
+      "userDeviceLocation": "",
+      "userDeviceIP": "192.168.111.49",
+      "userMacAddress": "2CFDA1703B60",
+      "websiteDomain": "https://Xchange-erp1/",
+      "browserAgentData": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+      "languageCode": "GB",
+      "websiteId": "",
+      "GUID": "afe2316f-77b5-4278-bae1-10e435c8daff",
+      "flexi": false,
+      "companyId": "Qlabs12345",
+      "client": {
+        "id": "150218",
+        "userID": "305354",
+        "branchId": "95775",
+        "customerNationality": "AE",
+        "customerCountryOfResidence": "AE",
+        "customerRequestedCurrency": "AED",
+        "corporateAgent": true,
+        "corporate": {
+          "tripType": "BTC",
+          "travelCategory": "Travel Test - FlightPolicy",
+          "travelPolicyId": "20303"
+        }
+      }
+    },
+    "distributionChain": {
+      "distributionChainLink": [
+        {
+          "orgRole": "Supplier",
+          "participatingOrg": {
+            "orgId": "4188"
+          }
+        }
+      ]
+    },
+    "request": {
+      "dataLists": {
+        "baggageAllowanceList": {
+          "baggageAllowance": [
+            {
+              "baggageAllowanceID": "BA1",
+              "typeCode": "checkIn",
+              "pieceAllowance": {
+                "totalQty": "1"
+              },
+              "weightAllowance": {
+                "maximumWeightMeasure": "23",
+                "weightUnitOfMeasurement": "KG"
+              }
+            }
+          ]
+        },
+        "contactInfoList": {
+          "contactInfo": [
+            {
+              "contactInfoID": "C1",
+              "contactTypeText": "",
+              "emailAddress": {
+                "emailAddressText": "ss@gmail.com"
+              },
+              "phone": [
+                {
+                  "labelText": "",
+                  "phoneNumber": "9241129100",
+                  "countryDialingCode": "+91"
+                }
+              ],
+              "postalAddress": [
+                {
+                  "buildingRoomText": "",
+                  "streetText": "",
+                  "postalCode": "",
+                  "cityName": "",
+                  "countryCode": ""
+                }
+              ]
+            },
+            {
+              "contactInfoID": "C2",
+              "contactTypeText": "Company",
+              "emailAddress": {
+                "emailAddressText": "ss@gmail"
+              },
+              "phone": [
+                {
+                  "labelText": "Office",
+                  "phoneNumber": "9241129100",
+                  "countryDialingCode": "+91"
+                },
+                {
+                  "labelText": "Home",
+                  "phoneNumber": "9241129100",
+                  "countryDialingCode": "+91"
+                },
+                {
+                  "labelText": "Mobile",
+                  "phoneNumber": "9241129100",
+                  "countryDialingCode": "+91"
+                }
+              ],
+              "postalAddress": [
+                {
+                  "buildingRoomText": "",
+                  "streetText": "",
+                  "postalCode": "",
+                  "cityName": "",
+                  "countryCode": ""
+                }
+              ]
+            }
+          ]
+        },
+        "serviceDefinitionList": {
+          "serviceDefinition": [
+            {
+              "serviceDefinitionID": "MEAL01",
+              "name": "Vegetarian Meal",
+              "serviceCode": "VGML",
+              "paxRefID": "ADT1",
+              "segmentRefID": "SEG1",
+              "price": {
+                "amount": 20,
+                "currencyCode": "BHD"
+              }
+            },
+            {
+              "serviceDefinitionID": "SEAT_8B_SEG1",
+              "name": "Seat 8B",
+              "serviceCode": "8B",
+              "paxRefID": "ADT1",
+              "segmentRefID": "SEG1",
+              "price": {
+                "amount": 20,
+                "currencyCode": "BHD"
+              }
+            },
+            {
+              "serviceDefinitionID": "SEAT_8B_SEG2",
+              "name": "Seat 8B",
+              "serviceCode": "8B",
+              "paxRefID": "ADT1",
+              "segmentRefID": "SEG1",
+              "price": {
+                "amount": 20,
+                "currencyCode": "BHD"
+              }
+            }
+          ]
+        },
+        "paxList": {
+          "pax": [
+            {
+              "paxId": "PAX1",
+              "ptc": "ADT",
+              "individual": {
+                "titleName": "Mr",
+                "givenName": "Raj",
+                "middleName": "Mohan",
+                "surName": "Kumar",
+                "birthDate": "1999-10-30",
+                "genderCode": "M"
+              },
+              "identityDoc": [
+                {
+                  "identityDocType": "P",
+                  "identityDocNumber": "S2328976223",
+                  "expiryDate": "2036-07-18",
+                  "issuingCountryCode": "IN"
+                }
+              ],
+              "contactInfoRefID": "C1"
+            }
+          ]
+        }
+      },
+      "createOrder": {
+        "acceptSelectedQuotedOfferList": {
+          "selectedPricedOffer": [
+            {
+              "fareMatch": false,
+              "offerID": "1-4188-1",
+              "ownerId": "4188",
+              "ownerCode": "1S",
+              "validatingCarrierCode": "AY",
+              "offerItem": {
+                "fareDetail": [
+                  {
+                    "offerItemID": "F1",
+                    "fareType": "PUB",
+                    "brandId": "ECLASSIC",
+                    "cabinClass": "Economy",
+                    "fareSource": "CRS",
+                    "corpCode": "",
+                    "promoCode": "",
+                    "brandName": "ECONOMY CLASSIC",
+                    "fareComponent": {
+                      "price": {
+                        "totalAmount": "199.8",
+                        "totalTaxAmount": "70.7"
+                      },
+                      "rbd": [
+                        "Z",
+                        "Z",
+                        "Z",
+                        "Z"
+                      ],
+                      "displayLtDt": "2026-05-16",
+                      "refundable": "False",
+                      "fareSellkey": "",
+                      "segSellKey": "",
+                      "supplierVATInclusive": false,
+                      "paxType": [
+                        {
+                          "type": "ADT",
+                          "fareBasisCode": [
+                            "ZNN0S2CM",
+                            "ZNN0S2CM"
+                          ],
+                          "baseAmount": "73.77",
+                          "tax": "47.68",
+                          "yq": "6.06",
+                          "yr": "0",
+                          "jn": "0",
+                          "taxSummary": {
+                            "tax": [
+                              {
+                                "taxCode": "YQ",
+                                "taxName": "SERVICE FEE - CARRIER-IMPOSED MISC",
+                                "suppAmount": "3360",
+                                "amount": "6.06",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "K3",
+                                "taxName": "GOODS AND SERVICE TAX INTERIM DOMESTIC AND INTERNATIONAL",
+                                "suppAmount": "2214",
+                                "amount": "3.99",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "IN",
+                                "taxName": "USER DEVELOPMENT FEE DEPARTURES",
+                                "suppAmount": "1092",
+                                "amount": "1.97",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "DQ",
+                                "taxName": "SECURITY CHARGE",
+                                "suppAmount": "702",
+                                "amount": "1.27",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "XU",
+                                "taxName": "AIR TRANSPORT SUPERVISION CHARGE",
+                                "suppAmount": "202",
+                                "amount": "0.36",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "WL",
+                                "taxName": "PASSENGER FEE  INTERNATIONAL TRANSFER",
+                                "suppAmount": "1376",
+                                "amount": "2.48",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "GB",
+                                "taxName": "AIR PASSENGER DUTY APD",
+                                "suppAmount": "13165",
+                                "amount": "23.74",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "UB",
+                                "taxName": "PASSENGER SERVICE CHARGE DEPARTURES",
+                                "suppAmount": "2975",
+                                "amount": "5.36",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "P2",
+                                "taxName": "AVIATION SECURITY FEE",
+                                "suppAmount": "1356",
+                                "amount": "2.45",
+                                "suppTax": false
+                              }
+                            ]
+                          },
+                          "transFee": {
+                            "amt": "0.00",
+                            "apiTransFee": "0.00"
+                          },
+                          "discount": {
+                            "amt": "0"
+                          }
+                        },
+                        {
+                          "type": "CHD",
+                          "fareBasisCode": [
+                            "ZNN0S2CM/CH",
+                            "ZNN0S2CM/CH"
+                          ],
+                          "baseAmount": "55.33",
+                          "tax": "23.03",
+                          "yq": "6.06",
+                          "yr": "0",
+                          "jn": "0",
+                          "taxSummary": {
+                            "totalTaxAmount": "23.03",
+                            "tax": [
+                              {
+                                "taxCode": "YQ",
+                                "taxName": "SERVICE FEE - CARRIER-IMPOSED MISC",
+                                "suppAmount": "3362",
+                                "amount": "6.06",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "K3",
+                                "taxName": "GOODS AND SERVICE TAX INTERIM DOMESTIC AND INTERNATIONAL",
+                                "suppAmount": "1703",
+                                "amount": "3.07",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "IN",
+                                "taxName": "USER DEVELOPMENT FEE DEPARTURES",
+                                "suppAmount": "1092",
+                                "amount": "1.97",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "DQ",
+                                "taxName": "SECURITY CHARGE",
+                                "suppAmount": "703",
+                                "amount": "1.27",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "XU",
+                                "taxName": "AIR TRANSPORT SUPERVISION CHARGE",
+                                "suppAmount": "202",
+                                "amount": "0.36",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "WL",
+                                "taxName": "PASSENGER FEE  INTERNATIONAL TRANSFER",
+                                "suppAmount": "1376",
+                                "amount": "2.48",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "UB",
+                                "taxName": "PASSENGER SERVICE CHARGE DEPARTURES",
+                                "suppAmount": "2987",
+                                "amount": "5.39",
+                                "suppTax": false
+                              },
+                              {
+                                "taxCode": "P2",
+                                "taxName": "AVIATION SECURITY FEE",
+                                "suppAmount": "1348",
+                                "amount": "2.43",
+                                "suppTax": false
+                              }
+                            ]
+                          },
+                          "transFee": {
+                            "amt": "0.00",
+                            "apiTransFee": "0.00"
+                          },
+                          "discount": {
+                            "amt": "0"
+                          }
+                        }
+                      ],
+                      "autoCharges": {
+                        "grandTotal": "-67",
+                        "charge": [
+                          {
+                            "code": "TFEE",
+                            "name": "CorpTransactionFee",
+                            "operator": "+",
+                            "isSupplierFee": "False",
+                            "mergeWith": "",
+                            "applyOn": "Base Fare",
+                            "dbAmount": {
+                              "type": "Percent",
+                              "value": "10"
+                            },
+                            "total": {
+                              "net": "0.00",
+                              "b2bNet": "13",
+                              "gross": "13"
+                            },
+                            "adult": {
+                              "net": "0.00",
+                              "b2bNet": "7",
+                              "gross": "7"
+                            },
+                            "child": {
+                              "net": "0.00",
+                              "b2bNet": "6",
+                              "gross": "6"
+                            }
+                          },
+                          {
+                            "code": "DISC",
+                            "name": "Corporate Discount",
+                            "operator": "-",
+                            "isSupplierFee": "False",
+                            "mergeWith": "",
+                            "applyOn": "",
+                            "dbAmount": {
+                              "type": "fixed",
+                              "value": "80"
+                            },
+                            "total": {
+                              "net": "0.00",
+                              "b2bNet": "80",
+                              "gross": "80"
+                            },
+                            "adult": {
+                              "net": "0.00",
+                              "b2bNet": "40",
+                              "gross": "40"
+                            },
+                            "child": {
+                              "net": "0.00",
+                              "b2bNet": "40",
+                              "gross": "40"
+                            }
+                          }
+                        ]
+                      },
+                      "taxCharges": {
+                        "title": "GST",
+                        "net": "0",
+                        "b2bNet": "14",
+                        "gross": "14",
+                        "pax": [
+                          {
+                            "type": "ADT",
+                            "net": "0.00",
+                            "b2bNet": "9.00",
+                            "gross": "9.00",
+                            "tax": [
+                              {
+                                "taxScope": "OOS",
+                                "code": "",
+                                "type": "I",
+                                "mergeWith": "",
+                                "applyOn": "Fare",
+                                "value": "0.00",
+                                "net": "0.00",
+                                "b2bNet": "0.00",
+                                "gross": "0.00"
+                              },
+                              {
+                                "taxScope": "APP",
+                                "code": "VAT STD OUT",
+                                "type": "O",
+                                "mergeWith": "TAX",
+                                "applyOn": "Tax",
+                                "value": "10.0000",
+                                "net": "0.00",
+                                "b2bNet": "5",
+                                "gross": "5"
+                              },
+                              {
+                                "taxScope": "APP",
+                                "code": "VAT STD OUT",
+                                "type": "O",
+                                "mergeWith": "FARE",
+                                "applyOn": "Fare",
+                                "value": "10.0000",
+                                "net": "0.00",
+                                "b2bNet": "7",
+                                "gross": "7"
+                              },
+                              {
+                                "taxScope": "APP",
+                                "code": "VAT STD OUT",
+                                "type": "O",
+                                "mergeWith": "",
+                                "applyOn": "TFEE",
+                                "value": "10.0000",
+                                "net": "0.00",
+                                "b2bNet": "1",
+                                "gross": "1"
+                              },
+                              {
+                                "taxScope": "APP",
+                                "code": "VAT OOS OUT",
+                                "type": "O",
+                                "mergeWith": "",
+                                "applyOn": "DISC",
+                                "value": "10.0000",
+                                "net": "0.00",
+                                "b2bNet": "-4",
+                                "gross": "-4"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "CHD",
+                            "net": "0.00",
+                            "b2bNet": "5.00",
+                            "gross": "5.00",
+                            "tax": [
+                              {
+                                "taxScope": "OOS",
+                                "code": "",
+                                "type": "I",
+                                "mergeWith": "",
+                                "applyOn": "Fare",
+                                "value": "0.00",
+                                "net": "0.00",
+                                "b2bNet": "0.00",
+                                "gross": "0.00"
+                              },
+                              {
+                                "taxScope": "APP",
+                                "code": "VAT STD OUT",
+                                "type": "O",
+                                "mergeWith": "TAX",
+                                "applyOn": "Tax",
+                                "value": "10.0000",
+                                "net": "0.00",
+                                "b2bNet": "2",
+                                "gross": "2"
+                              },
+                              {
+                                "taxScope": "APP",
+                                "code": "VAT STD OUT",
+                                "type": "O",
+                                "mergeWith": "FARE",
+                                "applyOn": "Fare",
+                                "value": "10.0000",
+                                "net": "0.00",
+                                "b2bNet": "6",
+                                "gross": "6"
+                              },
+                              {
+                                "taxScope": "APP",
+                                "code": "VAT STD OUT",
+                                "type": "O",
+                                "mergeWith": "",
+                                "applyOn": "CCCHG",
+                                "value": "10.0000",
+                                "net": "0.00",
+                                "b2bNet": "0",
+                                "gross": "0"
+                              },
+                              {
+                                "taxScope": "APP",
+                                "code": "VAT STD OUT",
+                                "type": "O",
+                                "mergeWith": "",
+                                "applyOn": "TFEE",
+                                "value": "10.0000",
+                                "net": "0.00",
+                                "b2bNet": "1",
+                                "gross": "1"
+                              },
+                              {
+                                "taxScope": "APP",
+                                "code": "VAT OOS OUT",
+                                "type": "O",
+                                "mergeWith": "",
+                                "applyOn": "DISC",
+                                "value": "10.0000",
+                                "net": "0.00",
+                                "b2bNet": "-4",
+                                "gross": "-4"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "miscInfo": {
+                      "noOfSeats": "4",
+                      "specialServices": [
+                        {
+                          "jDirection": {
+                            "segment": "DEL-LHR",
+                            "serviceRef": "4188_0"
+                          }
+                        },
+                        {
+                          "jDirection": {
+                            "segment": "LHR-DEL",
+                            "serviceRef": "4188_0"
+                          }
+                        }
+                      ]
+                    },
+                    "baggageAssociations": {
+                      "segment": [
+                        {
+                          "baggageAllowanceRefID": "BA39",
+                          "offerFlightAssociations": {
+                            "segmentReferences": {
+                              "segmentRefID": "SEG1"
+                            }
+                          },
+                          "paxRefID": [
+                            "PAX1",
+                            "PAX2"
+                          ]
+                        },
+                        {
+                          "baggageAllowanceRefID": "BA39",
+                          "offerFlightAssociations": {
+                            "segmentReferences": {
+                              "segmentRefID": "SEG2"
+                            }
+                          },
+                          "paxRefID": [
+                            "PAX1",
+                            "PAX2"
+                          ]
+                        },
+                        {
+                          "baggageAllowanceRefID": "BA39",
+                          "offerFlightAssociations": {
+                            "segmentReferences": {
+                              "segmentRefID": "SEG3"
+                            }
+                          },
+                          "paxRefID": [
+                            "PAX1",
+                            "PAX2"
+                          ]
+                        },
+                        {
+                          "baggageAllowanceRefID": "BA39",
+                          "offerFlightAssociations": {
+                            "segmentReferences": {
+                              "segmentRefID": "SEG4"
+                            }
+                          },
+                          "paxRefID": [
+                            "PAX1",
+                            "PAX2"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "segmentList": {
+                "segments": [
+                  {
+                    "segmentInfo": [
+                      {
+                        "segmentID": "SEG1",
+                        "segmentSellKey": "55",
+                        "departureDate": "2026-07-23",
+                        "departureTime": "07:40",
+                        "arrivalDate": "2026-07-23",
+                        "arrivalTime": "14:25",
+                        "departureAirport": "DEL",
+                        "arrivalAirport": "HEL",
+                        "airline": "AY",
+                        "marketingAirline": "AY",
+                        "operatingAirline": "AY",
+                        "flightNumber": "122",
+                        "airCraftType": "333",
+                        "noOfStops": "0",
+                        "departureTerminal": "3",
+                        "duration": "0915"
+                      },
+                      {
+                        "segmentID": "SEG2",
+                        "segmentSellKey": "57",
+                        "departureDate": "2026-07-23",
+                        "departureTime": "16:00",
+                        "arrivalDate": "2026-07-23",
+                        "arrivalTime": "17:05",
+                        "departureAirport": "HEL",
+                        "arrivalAirport": "LHR",
+                        "airline": "AY",
+                        "marketingAirline": "AY",
+                        "operatingAirline": "AY",
+                        "flightNumber": "1337",
+                        "airCraftType": "359",
+                        "noOfStops": "0",
+                        "arrivalTerminal": "3",
+                        "duration": "0305"
+                      }
+                    ]
+                  },
+                  {
+                    "segmentInfo": [
+                      {
+                        "segmentID": "SEG3",
+                        "segmentSellKey": "79",
+                        "departureDate": "2026-07-27",
+                        "departureTime": "07:30",
+                        "arrivalDate": "2026-07-27",
+                        "arrivalTime": "12:15",
+                        "departureAirport": "LHR",
+                        "arrivalAirport": "HEL",
+                        "airline": "AY",
+                        "marketingAirline": "AY",
+                        "operatingAirline": "AY",
+                        "flightNumber": "1340",
+                        "airCraftType": "32B",
+                        "noOfStops": "0",
+                        "departureTerminal": "3",
+                        "duration": "0245"
+                      },
+                      {
+                        "segmentID": "SEG4",
+                        "segmentSellKey": "37",
+                        "departureDate": "2026-07-27",
+                        "departureTime": "18:30",
+                        "arrivalDate": "2026-07-28",
+                        "arrivalTime": "05:20",
+                        "departureAirport": "HEL",
+                        "arrivalAirport": "DEL",
+                        "airline": "AY",
+                        "marketingAirline": "AY",
+                        "operatingAirline": "AY",
+                        "flightNumber": "121",
+                        "airCraftType": "333",
+                        "noOfStops": "0",
+                        "arrivalTerminal": "3",
+                        "duration": "0820"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "paymentFunctions": [
+        {
+          "paymentMethodCriteria": {
+            "paymentTypeCode": "CC",
+            "paymentCriteriaAddlInfo": {
+              "paymentCardCriteriaAddlInfo": {
+                "cardTypeText": "Credit Card",
+                "cardCodeText": "",
+                "cardMerchantId": "",
+                "cardPGId": ""
+              }
+            }
+          }
+        },
+        {
+          "paymentMethodCriteria": {
+            "paymentTypeCode": "CA"
+          }
+        }
+      ]
+    },
+    "orderContext": {
+      "onHold": false,
+      "company": {
+        "companyName": "",
+        "contactInfoRefID": "C2"
+      },
+      "stamping": []
+    }
+  }
+}

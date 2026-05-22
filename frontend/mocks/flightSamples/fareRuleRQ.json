@@ -1,0 +1,540 @@
+{
+  "fareRuleRQ": {
+    "header": {
+      "salesChannel": "BO-CA",
+      "userId": "5992",
+      "branchId": "1386",
+      "userSearchLocation": "AE",
+      "userDeviceLocation": "",
+      "userDeviceIP": "192.168.111.49",
+      "userMacAddress": "2CFDA1703B60",
+      "websiteDomain": "https://Xchange-erp1/",
+      "browserAgentData": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+      "languageCode": "GB",
+      "websiteId": "",
+      "GUID": "263a9879-a9ad-446d-a57d-7511d584d563",
+      "flexi": false,
+      "companyId": "Qlabs12345",
+      "client": {
+        "id": "150218",
+        "userID": "305354",
+        "branchId": "95775",
+        "customerNationality": "AE",
+        "customerCountryOfResidence": "AE",
+        "customerRequestedCurrency": "AED",
+        "corporateAgent": true,
+        "corporate": {
+          "tripType": "BTC",
+          "travelCategory": "Travel Test - FlightPolicy",
+          "travelPolicyId": "20303"
+        }
+      }
+    },
+    "request": {
+      "dataLists": {
+        "baggageAllowanceList": {
+          "baggageAllowance": [
+            {
+              "baggageAllowanceID": "BA1",
+              "typeCode": "checkIn",
+              "pieceAllowance": {
+                "totalQty": "1"
+              },
+              "weightAllowance": {
+                "maximumWeightMeasure": "23",
+                "weightUnitOfMeasurement": "KG"
+              }
+            }
+          ]
+        },
+        "paxList": {
+          "Adult": 1,
+          "Child": 0,
+          "Infant": 0,
+          "Youth": 0,
+          "Senior": 0,
+          "pax": [
+            {
+              "paxId": "PAX1",
+              "ptc": "ADT"
+            }
+          ]
+        },
+        "priceClassList": {
+          "priceClass": {
+            "cabinType": {
+              "cabinTypeCode": "EC"
+            }
+          }
+        }
+      },
+      "offer": [
+        {
+          "offerID": "1-4238-2",
+          "ownerId": "4238",
+          "ownerCode": "1A",
+          "validatingCarrierCode": "GF",
+          "offerItem": {
+            "fareDetail": [
+              {
+                "offerItemID": "F1",
+                "fareType": "ECONOMY LIGHT",
+                "cabinClass": "",
+                "fareSource": "CRS",
+                "corpCode": "",
+                "promoCode": "",
+                "brandName": "ECONOMY LIGHT",
+                "fareComponent": {
+                  "price": {
+                    "totalAmount": "107.43",
+                    "totalTaxAmount": "68.07"
+                  },
+                  "rbd": [
+                    "S",
+                    "S",
+                    "W",
+                    "W",
+                    "S",
+                    "S",
+                    "W",
+                    "W"
+                  ],
+                  "displayLtDt": "2026-05-31",
+                  "refundable": "true",
+                  "fareSellkey": "",
+                  "segSellKey": "",
+                  "supplierVATInclusive": false,
+                  "paxType": [
+                    {
+                      "type": "ADT",
+                      "fareBasisCode": [
+                        "SCLIT1IA",
+                        "SCLIT1IA",
+                        "WCLIT1IA",
+                        "WCLIT1IA"
+                      ],
+                      "baseAmount": "21.87",
+                      "tax": "34.14",
+                      "yq": "0",
+                      "yr": "0",
+                      "jn": "0",
+                      "transFee": {
+                        "amt": "10",
+                        "apiTransFee": "0.00"
+                      },
+                      "discount": {
+                        "amt": "0"
+                      },
+                      "rebate": {
+                        "amt": "0"
+                      },
+                      "supplierCommision": {
+                        "commOn": "",
+                        "value": "",
+                        "amt": "0"
+                      }
+                    },
+                    {
+                      "type": "CHD",
+                      "fareBasisCode": [
+                        "SCLIT1IACH",
+                        "SCLIT1IACH",
+                        "WCLIT1IACH",
+                        "WCLIT1IACH"
+                      ],
+                      "baseAmount": "17.49",
+                      "tax": "33.93",
+                      "yq": "0",
+                      "yr": "0",
+                      "jn": "0",
+                      "transFee": {
+                        "amt": "9",
+                        "apiTransFee": "0.00"
+                      },
+                      "discount": {
+                        "amt": "0"
+                      },
+                      "rebate": {
+                        "amt": "0"
+                      },
+                      "supplierCommision": {
+                        "commOn": "",
+                        "value": "",
+                        "amt": "0"
+                      }
+                    }
+                  ],
+                  "autoCharges": {
+                    "grandTotal": "-76",
+                    "charge": [
+                      {
+                        "code": "TFEE",
+                        "name": "CorpTransactionFee",
+                        "operator": "+",
+                        "isSupplierFee": "False",
+                        "mergeWith": "",
+                        "applyOn": "Base Fare",
+                        "dbAmount": {
+                          "type": "Percent",
+                          "value": "10"
+                        },
+                        "total": {
+                          "net": "0.00",
+                          "b2bNet": "4",
+                          "gross": "4"
+                        },
+                        "adult": {
+                          "net": "0.00",
+                          "b2bNet": "2",
+                          "gross": "2"
+                        },
+                        "child": {
+                          "net": "0.00",
+                          "b2bNet": "2",
+                          "gross": "2"
+                        }
+                      },
+                      {
+                        "code": "DISC",
+                        "name": "Corporate Discount",
+                        "operator": "-",
+                        "isSupplierFee": "False",
+                        "mergeWith": "",
+                        "applyOn": "",
+                        "dbAmount": {
+                          "type": "fixed",
+                          "value": "80"
+                        },
+                        "total": {
+                          "net": "0.00",
+                          "b2bNet": "80",
+                          "gross": "80"
+                        },
+                        "adult": {
+                          "net": "0.00",
+                          "b2bNet": "40",
+                          "gross": "40"
+                        },
+                        "child": {
+                          "net": "0.00",
+                          "b2bNet": "40",
+                          "gross": "40"
+                        }
+                      }
+                    ]
+                  },
+                  "taxCharges": {
+                    "title": "GST",
+                    "net": "0",
+                    "b2bNet": "-2",
+                    "gross": "-2",
+                    "pax": [
+                      {
+                        "type": "ADT",
+                        "net": "0.00",
+                        "b2bNet": "-1.00",
+                        "gross": "-1.00",
+                        "tax": [
+                          {
+                            "taxScope": "OOS",
+                            "code": "",
+                            "type": "I",
+                            "applyOn": "Fare",
+                            "mergeWith": "",
+                            "value": "0.00",
+                            "net": "0.00",
+                            "b2bNet": "0.00",
+                            "gross": "0.00"
+                          },
+                          {
+                            "taxScope": "APP",
+                            "code": "VAT STD OUT",
+                            "type": "O",
+                            "applyOn": "Fare",
+                            "mergeWith": "FARE",
+                            "value": "10.0000",
+                            "net": "0.00",
+                            "b2bNet": "2",
+                            "gross": "2"
+                          },
+                          {
+                            "taxScope": "APP",
+                            "code": "VAT STD OUT",
+                            "type": "O",
+                            "applyOn": "RMFEE",
+                            "mergeWith": "Fare",
+                            "value": "10.0000",
+                            "net": "0.00",
+                            "b2bNet": "1",
+                            "gross": "1"
+                          },
+                          {
+                            "taxScope": "APP",
+                            "code": "VAT STD OUT",
+                            "type": "O",
+                            "applyOn": "TFEE",
+                            "mergeWith": "",
+                            "value": "10.0000",
+                            "net": "0.00",
+                            "b2bNet": "0",
+                            "gross": "0"
+                          },
+                          {
+                            "taxScope": "APP",
+                            "code": "VAT OOS OUT",
+                            "type": "O",
+                            "applyOn": "DISC",
+                            "mergeWith": "",
+                            "value": "10.0000",
+                            "net": "0.00",
+                            "b2bNet": "-4",
+                            "gross": "-4"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "CHD",
+                        "net": "0.00",
+                        "b2bNet": "-1.00",
+                        "gross": "-1.00",
+                        "tax": [
+                          {
+                            "taxScope": "OOS",
+                            "code": "",
+                            "type": "I",
+                            "applyOn": "Fare",
+                            "mergeWith": "",
+                            "value": "0.00",
+                            "net": "0.00",
+                            "b2bNet": "0.00",
+                            "gross": "0.00"
+                          },
+                          {
+                            "taxScope": "APP",
+                            "code": "VAT STD OUT",
+                            "type": "O",
+                            "applyOn": "Fare",
+                            "mergeWith": "FARE",
+                            "value": "10.0000",
+                            "net": "0.00",
+                            "b2bNet": "2",
+                            "gross": "2"
+                          },
+                          {
+                            "taxScope": "APP",
+                            "code": "VAT STD OUT",
+                            "type": "O",
+                            "applyOn": "CCCHG",
+                            "mergeWith": "",
+                            "value": "10.0000",
+                            "net": "0.00",
+                            "b2bNet": "0",
+                            "gross": "0"
+                          },
+                          {
+                            "taxScope": "APP",
+                            "code": "VAT STD OUT",
+                            "type": "O",
+                            "applyOn": "RMFEE",
+                            "mergeWith": "Fare",
+                            "value": "10.0000",
+                            "net": "0.00",
+                            "b2bNet": "1",
+                            "gross": "1"
+                          },
+                          {
+                            "taxScope": "APP",
+                            "code": "VAT STD OUT",
+                            "type": "O",
+                            "applyOn": "TFEE",
+                            "mergeWith": "",
+                            "value": "10.0000",
+                            "net": "0.00",
+                            "b2bNet": "0",
+                            "gross": "0"
+                          },
+                          {
+                            "taxScope": "APP",
+                            "code": "VAT OOS OUT",
+                            "type": "O",
+                            "applyOn": "DISC",
+                            "mergeWith": "",
+                            "value": "10.0000",
+                            "net": "0.00",
+                            "b2bNet": "-4",
+                            "gross": "-4"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "miscInfo": {
+                  "noOfSeats": "7,7",
+                  "specialServices": [
+                    {
+                      "jDirection": {
+                        "segment": "DEL-BAH",
+                        "serviceRef": "4238_3"
+                      }
+                    },
+                    {
+                      "jDirection": {
+                        "segment": "BAH-DXB",
+                        "serviceRef": "4238_3"
+                      }
+                    },
+                    {
+                      "jDirection": {
+                        "segment": "DXB-BAH",
+                        "serviceRef": "4238_4"
+                      }
+                    },
+                    {
+                      "jDirection": {
+                        "segment": "BAH-DEL",
+                        "serviceRef": "4238_4"
+                      }
+                    }
+                  ]
+                },
+                "baggageAssociations": {
+                  "segment": [
+                    {
+                      "baggageAllowanceRefID": "BA1",
+                      "offerFlightAssociations": {
+                        "segmentReferences": {
+                          "segmentRefID": "SEG1"
+                        }
+                      },
+                      "paxRefID": [
+                        "PAX1",
+                        "PAX2"
+                      ]
+                    },
+                    {
+                      "baggageAllowanceRefID": "BA1",
+                      "offerFlightAssociations": {
+                        "segmentReferences": {
+                          "segmentRefID": "SEG2"
+                        }
+                      },
+                      "paxRefID": [
+                        "PAX1",
+                        "PAX2"
+                      ]
+                    },
+                    {
+                      "baggageAllowanceRefID": "BA1",
+                      "offerFlightAssociations": {
+                        "segmentReferences": {
+                          "segmentRefID": "SEG3"
+                        }
+                      },
+                      "paxRefID": [
+                        "PAX1",
+                        "PAX2"
+                      ]
+                    },
+                    {
+                      "baggageAllowanceRefID": "BA1",
+                      "offerFlightAssociations": {
+                        "segmentReferences": {
+                          "segmentRefID": "SEG4"
+                        }
+                      },
+                      "paxRefID": [
+                        "PAX1",
+                        "PAX2"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "segmentList": {
+            "segments": [
+              {
+                "segmentInfo": [
+                  {
+                    "segmentSellKey": "",
+                    "departureDate": "2026-07-23",
+                    "departureTime": "0455",
+                    "arrivalDate": "2026-07-23",
+                    "arrivalTime": "0640",
+                    "departureAirport": "DEL",
+                    "arrivalAirport": "BAH",
+                    "airline": "GF",
+                    "marketingAirline": "GF",
+                    "operatingAirline": "GF",
+                    "flightNumber": "131",
+                    "airCraftType": "32Q",
+                    "noOfStops": "0",
+                    "departureTerminal": "3",
+                    "duration": "0145"
+                  },
+                  {
+                    "segmentSellKey": "",
+                    "departureDate": "2026-07-23",
+                    "departureTime": "0725",
+                    "arrivalDate": "2026-07-23",
+                    "arrivalTime": "0950",
+                    "departureAirport": "BAH",
+                    "arrivalAirport": "DXB",
+                    "airline": "GF",
+                    "marketingAirline": "GF",
+                    "operatingAirline": "GF",
+                    "flightNumber": "502",
+                    "airCraftType": "32Q",
+                    "noOfStops": "0",
+                    "arrivalTerminal": "1",
+                    "duration": "0225"
+                  }
+                ]
+              },
+              {
+                "segmentInfo": [
+                  {
+                    "segmentSellKey": "",
+                    "departureDate": "2026-07-30",
+                    "departureTime": "1910",
+                    "arrivalDate": "2026-07-30",
+                    "arrivalTime": "1930",
+                    "departureAirport": "DXB",
+                    "arrivalAirport": "BAH",
+                    "airline": "GF",
+                    "marketingAirline": "GF",
+                    "operatingAirline": "GF",
+                    "flightNumber": "509",
+                    "airCraftType": "32N",
+                    "noOfStops": "0",
+                    "departureTerminal": "1",
+                    "duration": "0020"
+                  },
+                  {
+                    "segmentSellKey": "",
+                    "departureDate": "2026-07-30",
+                    "departureTime": "2135",
+                    "arrivalDate": "2026-07-31",
+                    "arrivalTime": "0405",
+                    "departureAirport": "BAH",
+                    "arrivalAirport": "DEL",
+                    "airline": "GF",
+                    "marketingAirline": "GF",
+                    "operatingAirline": "GF",
+                    "flightNumber": "130",
+                    "airCraftType": "32Q",
+                    "noOfStops": "0",
+                    "arrivalTerminal": "3",
+                    "duration": "0630"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
