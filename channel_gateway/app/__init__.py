@@ -1,1 +1,0 @@
-"""Channel gateway service package."""

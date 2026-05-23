@@ -1,1 +1,0 @@
-"""Standalone channel gateway service."""
