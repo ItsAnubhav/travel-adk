@@ -44,7 +44,7 @@ services:
     container_name: adk-travel-frontend
     restart: unless-stopped
     ports:
-      - "5173:80"
+      - "5173:5173"
     depends_on:
       - app
 
