@@ -10,17 +10,16 @@ ENV_FILE = Path(__file__).resolve().parents[1] / ".env"
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=ENV_FILE, env_file_encoding="utf-8", extra="ignore")
 
-    app_name: str = "adk-travel-agents"
-    app_env: str = "local"
-    log_level: str = "INFO"
+    app_name: str
+    app_env: str
+    log_level: str
     openai_api_key: str = Field(
-        default="",
         validation_alias=AliasChoices("OPENAI_API_KEY", "OPENAPI_KEY", "OPENAI_KEY"),
     )
-    adk_model: str = "openai/gpt-5-mini"
-    database_url: str = "postgresql+asyncpg://adk:adk_password@localhost:5432/adk_travel"
-    backend_cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
-    auth_api_base_url: str = ""
+    adk_model: str
+    database_url: str
+    backend_cors_origins: str
+    auth_api_base_url: str
 
     @property
     def effective_llm_model(self) -> str:
