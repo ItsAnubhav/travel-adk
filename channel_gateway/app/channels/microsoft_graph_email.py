@@ -183,7 +183,7 @@ def build_router(
 ) -> APIRouter:
     router = APIRouter(prefix="/webhooks/microsoft/email", tags=["microsoft-email"])
 
-    @router.post("")
+    @router.post("", response_model=None)
     async def microsoft_email_webhook(
         request: Request,
         validation_token: str | None = Query(default=None, alias="validationToken"),

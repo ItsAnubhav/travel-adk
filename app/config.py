@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     adk_model: str = "openai/gpt-5-mini"
     database_url: str = "postgresql+asyncpg://adk:adk_password@localhost:5432/adk_travel"
     backend_cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+    auth_api_base_url: str = ""
 
     @property
     def effective_llm_model(self) -> str:

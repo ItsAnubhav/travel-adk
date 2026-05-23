@@ -14,7 +14,9 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the application
+# Build the application with optional base path
+ARG VITE_BASE_PATH=/
+ENV VITE_BASE_PATH=$VITE_BASE_PATH
 RUN npm run build
 
 # Stage 2: Production image with Nginx

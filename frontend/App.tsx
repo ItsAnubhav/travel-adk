@@ -159,8 +159,9 @@ const App: React.FC = () => {
       refreshTokenExpiresIn: loginResult.refreshTokenExpiresIn
     }));
 
+    const { password: _password, ...safePayload } = payload;
     const extendedPayload = {
-      ...payload,
+      ...safePayload,
       subAgentId: loginResult.decoded_token_data?.subagent_id,
       saUserId: loginResult.decoded_token_data?.sa_user_id,
       companyId: loginResult.decoded_token_data?.company_id || payload.companyId,

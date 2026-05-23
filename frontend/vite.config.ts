@@ -5,7 +5,9 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     const backendTarget = env.VITE_DEV_BACKEND_URL || 'http://localhost:8000';
+    const base = env.VITE_BASE_PATH || '/';
     return {
+      base,
       server: {
         port: 5173,
         host: '0.0.0.0',

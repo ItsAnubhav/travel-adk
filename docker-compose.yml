@@ -11,11 +11,61 @@ services:
       - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-multiple-dbs.sh:/docker-entrypoint-initdb.d/init-multiple-dbs.sh:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U adk -d adk_travel"]
       interval: 5s
       timeout: 5s
       retries: 20
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: adk-travel-app
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://adk:adk_password@postgres:5432/adk_travel
+      BACKEND_CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  channel_gateway:
+    build:
+      context: ./channel_gateway
+      dockerfile: Dockerfile
+    container_name: adk-travel-channel-gateway
+    restart: unless-stopped
+    environment:
+      GATEWAY_DATABASE_URL: postgresql+asyncpg://gateway:gateway_password@postgres:5432/channel_gateway
+      AGENT_API_BASE_URL: http://app:8000/api
+    env_file:
+      - .env
+    ports:
+      - "8010:8010"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      app:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_BASE_PATH: /app/
+    container_name: adk-travel-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - app
 
   pgadmin:
     image: dpage/pgadmin4:8
