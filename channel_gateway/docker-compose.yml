@@ -3,59 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env
     restart: unless-stopped
-    environment:
-      AGENT_API_BASE_URL: ${AGENT_API_BASE_URL:-http://host.docker.internal:8000/api}
-      AGENT_API_TIMEOUT_SECONDS: ${AGENT_API_TIMEOUT_SECONDS:-120}
-      DEFAULT_AGENT: ${DEFAULT_AGENT:-root}
-      CHANNEL_RESULT_LIMIT: ${CHANNEL_RESULT_LIMIT:-5}
-      PUBLIC_APP_URL: ${PUBLIC_APP_URL:-http://localhost:5173}
-      PUBLIC_GATEWAY_URL: ${PUBLIC_GATEWAY_URL:-http://localhost:8010}
-      GATEWAY_DATABASE_URL: ${GATEWAY_DATABASE_URL:-postgresql+asyncpg://gateway:gateway_password@channel-gateway-postgres:5432/channel_gateway}
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
-      TELEGRAM_WEBHOOK_SECRET: ${TELEGRAM_WEBHOOK_SECRET:-}
-      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
-      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
-      TWILIO_WHATSAPP_FROM: ${TWILIO_WHATSAPP_FROM:-whatsapp:+0000000000}
-      EMAIL_IMAP_HOST: ${EMAIL_IMAP_HOST:-}
-      EMAIL_IMAP_PORT: ${EMAIL_IMAP_PORT:-993}
-      EMAIL_IMAP_USER: ${EMAIL_IMAP_USER:-}
-      EMAIL_IMAP_PASSWORD: ${EMAIL_IMAP_PASSWORD:-}
-      EMAIL_IMAP_FOLDER: ${EMAIL_IMAP_FOLDER:-INBOX}
-      EMAIL_POLL_INTERVAL_SECONDS: ${EMAIL_POLL_INTERVAL_SECONDS:-30}
-      EMAIL_SMTP_HOST: ${EMAIL_SMTP_HOST:-}
-      EMAIL_SMTP_PORT: ${EMAIL_SMTP_PORT:-587}
-      EMAIL_SMTP_USER: ${EMAIL_SMTP_USER:-}
-      EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD:-}
-      EMAIL_FROM: ${EMAIL_FROM:-}
-      MICROSOFT_TENANT_ID: ${MICROSOFT_TENANT_ID:-}
-      MICROSOFT_CLIENT_ID: ${MICROSOFT_CLIENT_ID:-}
-      MICROSOFT_CLIENT_SECRET: ${MICROSOFT_CLIENT_SECRET:-}
-      MICROSOFT_MAILBOX: ${MICROSOFT_MAILBOX:-aiva@travog.com}
-      MICROSOFT_WEBHOOK_CLIENT_STATE: ${MICROSOFT_WEBHOOK_CLIENT_STATE:-}
-      MICROSOFT_SUBSCRIPTION_RENEWAL_SECONDS: ${MICROSOFT_SUBSCRIPTION_RENEWAL_SECONDS:-3600}
     ports:
       - "8010:8010"
-    depends_on:
-      channel-gateway-postgres:
-        condition: service_healthy
-
-  channel-gateway-postgres:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: channel_gateway
-      POSTGRES_USER: gateway
-      POSTGRES_PASSWORD: ${GATEWAY_POSTGRES_PASSWORD:-gateway_password}
-    ports:
-      - "5433:5432"
-    volumes:
-      - channel_gateway_postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U gateway -d channel_gateway"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-
-volumes:
-  channel_gateway_postgres_data:

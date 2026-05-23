@@ -27,7 +27,13 @@ email_stop_event = asyncio.Event()
 graph_stop_event = asyncio.Event()
 
 
+def _mask_connection_string(url: str) -> str:
+    import re
+    return re.sub(r'(://)([^:]+):([^@]+)(@)', r'\1\2:***\4', url)
+
+
 async def initialize_database_with_retry(max_retries: int = 30, base_delay: float = 1.0) -> None:
+    masked_url = _mask_connection_string(settings.gateway_database_url)
     for attempt in range(max_retries):
         try:
             await store.initialize()
@@ -35,10 +41,10 @@ async def initialize_database_with_retry(max_retries: int = 30, base_delay: floa
             return
         except Exception as e:
             if attempt == max_retries - 1:
-                logger.error(f"Failed to initialize database after {max_retries} attempts: {e}")
+                logger.error(f"Failed to initialize database after {max_retries} attempts (URL: {masked_url}): {e}")
                 raise
             delay = base_delay * (2 ** attempt)
-            logger.warning(f"Database initialization failed (attempt {attempt + 1}/{max_retries}), retrying in {delay}s: {e}")
+            logger.warning(f"Database initialization failed (attempt {attempt + 1}/{max_retries}, URL: {masked_url}), retrying in {delay}s: {e}")
             await asyncio.sleep(delay)
 
 
