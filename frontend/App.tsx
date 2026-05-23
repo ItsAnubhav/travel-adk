@@ -17,13 +17,9 @@ const ADMIN_PATH = '/admin';
 const DASHBOARD_PATH = '/dashboard';
 const EMBED_PATH = '/embed/chat';
 const TEST_PATH = '/test';
-const LOCAL_LOGIN: LoginPayload = {
-  companyId: 'QLABS12345',
-  accountNo: '',
-  userName: 'local-user',
-  password: '',
-  source: 'LOCAL',
-};
+
+const isProtectedPath = (path: string): boolean =>
+  path === ADMIN_PATH || path === DASHBOARD_PATH;
 
 interface EmbedBootstrap {
   loginPayload: LoginPayload;
@@ -56,6 +52,9 @@ const readEmbedBootstrap = (): EmbedBootstrap | null => {
 const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState(() => window.location.pathname || CHAT_PATH);
   const [authMessage, setAuthMessage] = useState<string | null>(null);
+  const [postLoginPath, setPostLoginPath] = useState(() =>
+    isProtectedPath(window.location.pathname) ? window.location.pathname : ADMIN_PATH,
+  );
   const isEmbed = currentPath === EMBED_PATH;
   const isAdmin = currentPath === ADMIN_PATH;
   const embedBootstrap = React.useMemo(
@@ -116,10 +115,15 @@ const App: React.FC = () => {
   useEffect(() => {
     if (currentPath === EMBED_PATH || currentPath === TEST_PATH) return;
     const isAuthenticated = Boolean(loginPayload) && hasToken;
-    if (isAuthenticated && currentPath === LOGIN_PATH) {
-      navigateTo(ADMIN_PATH);
+    if (!isAuthenticated && isProtectedPath(currentPath)) {
+      setPostLoginPath(currentPath);
+      navigateTo(LOGIN_PATH);
+      return;
     }
-  }, [currentPath, loginPayload, hasToken]);
+    if (isAuthenticated && currentPath === LOGIN_PATH) {
+      navigateTo(postLoginPath);
+    }
+  }, [currentPath, loginPayload, hasToken, postLoginPath]);
 
   useEffect(() => {
     const isAuthenticated = Boolean(loginPayload) && hasToken;
@@ -164,7 +168,7 @@ const App: React.FC = () => {
     setLoginPayload(extendedPayload);
     localStorage.setItem(LOGIN_SESSION_KEY, JSON.stringify(extendedPayload));
     setHasToken(true);
-    navigateTo(ADMIN_PATH);
+    navigateTo(postLoginPath);
   };
 
   const isAuthenticated = Boolean(loginPayload) && hasToken;
@@ -206,10 +210,16 @@ const App: React.FC = () => {
       }
       return <AdminPage loginPayload={loginPayload} embedMode />;
     }
-    return <AdminPage loginPayload={loginPayload || LOCAL_LOGIN} />;
+    if (!isAuthenticated || !loginPayload) {
+      return <LoginPage onLogin={handleLogin} initialErrorMessage={authMessage} />;
+    }
+    return <AdminPage loginPayload={loginPayload} />;
   }
 
   if (currentPath === DASHBOARD_PATH) {
+    if (!isAuthenticated) {
+      return <LoginPage onLogin={handleLogin} initialErrorMessage={authMessage} />;
+    }
     return <DashboardPage />;
   }
 
@@ -217,7 +227,11 @@ const App: React.FC = () => {
     return <LoginPage onLogin={handleLogin} initialErrorMessage={authMessage} />;
   }
 
-  return <AdminPage loginPayload={loginPayload || LOCAL_LOGIN} />;
+  if (!isAuthenticated || !loginPayload) {
+    return <LoginPage onLogin={handleLogin} initialErrorMessage={authMessage} />;
+  }
+
+  return <AdminPage loginPayload={loginPayload} />;
 };
 
 export default App;

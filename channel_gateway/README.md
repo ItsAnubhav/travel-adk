@@ -25,10 +25,10 @@ For Microsoft 365 mailboxes, use the Microsoft Graph webhook path. IMAP polling 
 
 ## Local Setup
 
-From the repository root:
+From the channel gateway repository root:
 
 ```bash
-cp channel_gateway/.env.example channel_gateway/.env
+cp .env.example .env
 ```
 
 Start the agent API separately on port `8000`:
@@ -40,7 +40,7 @@ uvicorn app.main:app --reload --port 8000
 Start the channel gateway:
 
 ```bash
-docker compose up channel-gateway
+docker compose up
 ```
 
 The gateway listens on:
@@ -49,21 +49,47 @@ The gateway listens on:
 http://localhost:8010
 ```
 
-For local Docker-to-host agent calls, keep this value in `channel_gateway/.env`:
+For local Docker-to-host agent calls, keep this value in `.env`:
 
 ```env
 AGENT_API_BASE_URL=http://host.docker.internal:8000/api
 ```
 
-If the agent API is later containerized in the same Compose network, change it to:
+If the agent API is containerized on the same Docker network, change it to the backend service name:
 
 ```env
 AGENT_API_BASE_URL=http://agent-api:8000/api
 ```
 
+## Dokploy Setup
+
+Deploy this repository as its own Dokploy Compose service.
+
+1. Create a new Dokploy Compose service.
+2. Connect this channel gateway repository.
+3. Set the Compose Path to `./docker-compose.yml`.
+4. Add the production environment variables in Dokploy's Environment tab.
+5. Add a domain that points to the `channel-gateway` service on port `8010`.
+
+At minimum, set:
+
+```env
+AGENT_API_BASE_URL=https://YOUR_BACKEND_DOMAIN/api
+GATEWAY_DATABASE_URL=postgresql+asyncpg://gateway:YOUR_PASSWORD@channel-gateway-postgres:5432/channel_gateway
+GATEWAY_POSTGRES_PASSWORD=YOUR_PASSWORD
+PUBLIC_APP_URL=https://YOUR_FRONTEND_DOMAIN
+PUBLIC_GATEWAY_URL=https://YOUR_GATEWAY_DOMAIN
+```
+
+If the backend and gateway are deployed on the same Dokploy Docker network, `AGENT_API_BASE_URL` can use the internal backend service name instead:
+
+```env
+AGENT_API_BASE_URL=http://YOUR_BACKEND_SERVICE_NAME:8000/api
+```
+
 ## Common Configuration
 
-All secrets stay in `channel_gateway/.env`. Do not commit real credentials.
+All secrets stay in `.env`. Do not commit real credentials.
 
 Important shared settings:
 

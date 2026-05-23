@@ -24,9 +24,17 @@ dev = [
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.packages.find]
-where = [".."]
-include = ["channel_gateway*"]
+[tool.setuptools]
+packages = [
+  "channel_gateway",
+  "channel_gateway.app",
+  "channel_gateway.app.channels",
+]
+
+[tool.setuptools.package-dir]
+channel_gateway = "."
+"channel_gateway.app" = "app"
+"channel_gateway.app.channels" = "app/channels"
 
 [tool.ruff]
 line-length = 100
