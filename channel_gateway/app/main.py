@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -16,6 +17,8 @@ from channel_gateway.app.channels import (
 from channel_gateway.app.config import get_settings
 from channel_gateway.app.session_store import ChannelSessionStore
 
+logger = logging.getLogger(__name__)
+
 settings = get_settings()
 store = ChannelSessionStore(settings.gateway_database_url)
 agent_client = AgentClient(settings)
@@ -24,9 +27,24 @@ email_stop_event = asyncio.Event()
 graph_stop_event = asyncio.Event()
 
 
+async def initialize_database_with_retry(max_retries: int = 30, base_delay: float = 1.0) -> None:
+    for attempt in range(max_retries):
+        try:
+            await store.initialize()
+            logger.info("Database initialized successfully")
+            return
+        except Exception as e:
+            if attempt == max_retries - 1:
+                logger.error(f"Failed to initialize database after {max_retries} attempts: {e}")
+                raise
+            delay = base_delay * (2 ** attempt)
+            logger.warning(f"Database initialization failed (attempt {attempt + 1}/{max_retries}), retrying in {delay}s: {e}")
+            await asyncio.sleep(delay)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await store.initialize()
+    await initialize_database_with_retry()
     poller = asyncio.create_task(
         email_polling.run_email_polling(
             settings,
