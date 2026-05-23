@@ -91,22 +91,50 @@ async def run_chat_turn(request: ChatRequest) -> ChatRunResult:
 
 
 async def _run_chat(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
+    setup_started = time.perf_counter()
     settings = get_settings()
     if not await control_plane.is_agent_enabled(request.agent):
         raise HTTPException(status_code=403, detail=f"Agent {request.agent} is disabled")
 
     session_id = request.session_id or str(uuid.uuid4())
     chat_runner = runner(request.agent)
+    agent_name = getattr(chat_runner.agent, "name", request.agent)
+    logger.info(
+        "Chat setup runner ready user_id=%s session_id=%s agent_key=%s agent_name=%s elapsed_s=%.3f",
+        request.user_id,
+        session_id,
+        request.agent,
+        agent_name,
+        time.perf_counter() - setup_started,
+    )
     personalization_context = await _load_personalization_context(request.user_id, request.context)
+    logger.info(
+        "Chat setup personalization loaded user_id=%s session_id=%s elapsed_s=%.3f",
+        request.user_id,
+        session_id,
+        time.perf_counter() - setup_started,
+    )
     await _ensure_session(chat_runner.session_service, settings.app_name, request.user_id, session_id)
+    logger.info(
+        "Chat setup session ensured user_id=%s session_id=%s elapsed_s=%.3f",
+        request.user_id,
+        session_id,
+        time.perf_counter() - setup_started,
+    )
     await _store_request_context(
         chat_runner.session_service,
         settings.app_name,
         request.user_id,
         session_id,
-        request.agent,
+        agent_name,
         request.context,
         personalization_context,
+    )
+    logger.info(
+        "Chat setup context stored user_id=%s session_id=%s elapsed_s=%.3f",
+        request.user_id,
+        session_id,
+        time.perf_counter() - setup_started,
     )
 
     assistant_text = ""
