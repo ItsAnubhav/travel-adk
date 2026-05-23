@@ -104,13 +104,14 @@ async def _run_chat(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
         settings.app_name,
         request.user_id,
         session_id,
+        request.agent,
         request.context,
         personalization_context,
     )
 
     assistant_text = ""
     run_started = time.perf_counter()
-    tool_started_at: dict[str, float] = {}
+    event_timing_state: dict[str, Any] = {"tool_started_at": {}, "message_logged": False}
     content = types.Content(
         role="user",
         parts=[types.Part(text=_personalized_message(request.message, personalization_context))],
@@ -146,7 +147,7 @@ async def _run_chat(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
         ):
             await _record_token_usage(session_id, event)
             payload = _event_to_payload(event)
-            _log_chat_event_timing(session_id, payload, run_started, tool_started_at)
+            _log_chat_event_timing(session_id, payload, run_started, event_timing_state)
             await _record_control_plane_event(session_id, payload)
             await _record_chat_history_event(
                 session_id=session_id,
@@ -170,22 +171,22 @@ async def _run_chat(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
                 event_type="message",
                 text=assistant_text,
             )
-        yield {"event": "done", "data": {"session_id": session_id}}
         logger.info(
             "Chat run done session_id=%s elapsed_s=%.3f",
             session_id,
             time.perf_counter() - run_started,
         )
-        await control_plane.mark_session_done(session_id=session_id, status="ended")
-        await chat_history_store.finish_session(session_id=session_id, status="ended")
         asyncio.create_task(
-            _persist_session_to_memory(
+            _finalize_successful_session(
+                session_id,
                 chat_runner.session_service,
                 settings.app_name,
                 request.user_id,
-                session_id,
+                run_started,
             )
         )
+        yield {"event": "done", "data": {"session_id": session_id}}
+        return
     except Exception as exc:
         logger.exception("Chat run failed for session_id=%s", session_id)
         await control_plane.mark_session_done(session_id=session_id, status="failed")
@@ -197,12 +198,13 @@ def _log_chat_event_timing(
     session_id: str,
     payload: dict[str, Any],
     run_started: float,
-    tool_started_at: dict[str, float],
+    state: dict[str, Any],
 ) -> None:
     event_type = payload["event"]
     data = payload["data"]
     if event_type == "tool_call":
         tool_name = str(data.get("name") or data.get("id") or "unknown_tool")
+        tool_started_at = state["tool_started_at"]
         tool_started_at[tool_name] = time.perf_counter()
         logger.info(
             "Chat tool call session_id=%s tool=%s elapsed_s=%.3f",
@@ -212,6 +214,7 @@ def _log_chat_event_timing(
         )
     elif event_type == "tool_response":
         tool_name = str(data.get("name") or data.get("id") or "unknown_tool")
+        tool_started_at = state["tool_started_at"]
         started = tool_started_at.pop(tool_name, None)
         logger.info(
             "Chat tool response session_id=%s tool=%s tool_elapsed_s=%s elapsed_s=%.3f",
@@ -221,10 +224,14 @@ def _log_chat_event_timing(
             time.perf_counter() - run_started,
         )
     elif event_type == "message":
+        final = bool(data.get("final"))
+        if state.get("message_logged") and not final:
+            return
+        state["message_logged"] = True
         logger.info(
             "Chat message event session_id=%s final=%s elapsed_s=%.3f",
             session_id,
-            data.get("final"),
+            final,
             time.perf_counter() - run_started,
         )
 
@@ -254,6 +261,7 @@ async def _store_request_context(
     app_name: str,
     user_id: str,
     session_id: str,
+    agent_id: str,
     context: dict[str, Any],
     personalization_context: dict[str, Any],
 ) -> None:
@@ -272,7 +280,7 @@ async def _store_request_context(
     await session_service.append_event(
         session,
         Event(
-            author="system",
+            author=agent_id,
             actions=EventActions(stateDelta=state_delta),
         ),
     )
@@ -341,6 +349,35 @@ async def _persist_session_to_memory(
             await get_memory_service().add_session_to_memory(session)
         except Exception:
             logger.exception("Failed to persist session_id=%s to memory", session_id)
+
+
+async def _finalize_successful_session(
+    session_id: str,
+    session_service: DatabaseSessionService,
+    app_name: str,
+    user_id: str,
+    run_started: float,
+) -> None:
+    try:
+        cleanup_started = time.perf_counter()
+        await control_plane.mark_session_done(session_id=session_id, status="ended")
+        logger.info(
+            "Chat control-plane finalization done session_id=%s elapsed_s=%.3f total_elapsed_s=%.3f",
+            session_id,
+            time.perf_counter() - cleanup_started,
+            time.perf_counter() - run_started,
+        )
+        history_finish_started = time.perf_counter()
+        await chat_history_store.finish_session(session_id=session_id, status="ended")
+        logger.info(
+            "Chat history finalization done session_id=%s elapsed_s=%.3f total_elapsed_s=%.3f",
+            session_id,
+            time.perf_counter() - history_finish_started,
+            time.perf_counter() - run_started,
+        )
+        await _persist_session_to_memory(session_service, app_name, user_id, session_id)
+    except Exception:
+        logger.exception("Chat session finalization failed session_id=%s", session_id)
 
 
 def _event_to_payload(event: Any) -> dict[str, Any]:
