@@ -35,25 +35,6 @@ services:
       postgres:
         condition: service_healthy
 
-  channel_gateway:
-    build:
-      context: ./channel_gateway
-      dockerfile: Dockerfile
-    container_name: adk-travel-channel-gateway
-    restart: unless-stopped
-    environment:
-      GATEWAY_DATABASE_URL: postgresql+asyncpg://gateway:gateway_password@postgres:5432/channel_gateway
-      AGENT_API_BASE_URL: http://app:8000/api
-    env_file:
-      - .env
-    ports:
-      - "8010:8010"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      app:
-        condition: service_started
-
   frontend:
     build:
       context: ./frontend
