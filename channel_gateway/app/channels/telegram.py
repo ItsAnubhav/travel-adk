@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import asyncio
+import logging
+import time
+from contextlib import suppress
 from typing import Any
 
 import httpx
@@ -10,6 +14,9 @@ from channel_gateway.app.config import Settings
 from channel_gateway.app.formatters import format_channel_response
 from channel_gateway.app.schemas import ChannelInboundMessage, ChatRequest
 from channel_gateway.app.session_store import ChannelSessionStore
+
+
+logger = logging.getLogger(__name__)
 
 
 def build_router(settings: Settings, store: ChannelSessionStore, agent_client: AgentClient) -> APIRouter:
@@ -26,10 +33,40 @@ def build_router(settings: Settings, store: ChannelSessionStore, agent_client: A
         inbound = parse_telegram_update(await request.json())
         if inbound is None:
             return {"status": "ignored"}
-        await handle_inbound_message(inbound, settings, store, agent_client, send_telegram_message)
-        return {"status": "ok"}
+
+        asyncio.create_task(
+            handle_telegram_inbound_with_typing(inbound, settings, store, agent_client)
+        )
+        return {"status": "accepted"}
 
     return router
+
+
+async def handle_telegram_inbound_with_typing(
+    inbound: ChannelInboundMessage,
+    settings: Settings,
+    store: ChannelSessionStore,
+    agent_client: AgentClient,
+) -> None:
+    started = time.perf_counter()
+    typing_task = asyncio.create_task(send_telegram_typing_until_cancelled(settings, inbound))
+    try:
+        await handle_inbound_message(inbound, settings, store, agent_client, send_telegram_message)
+        logger.info(
+            "Telegram message processed channel_message_id=%s elapsed_s=%.3f",
+            inbound.external_message_id,
+            time.perf_counter() - started,
+        )
+    except Exception:
+        logger.exception(
+            "Telegram message failed channel_message_id=%s elapsed_s=%.3f",
+            inbound.external_message_id,
+            time.perf_counter() - started,
+        )
+    finally:
+        typing_task.cancel()
+        with suppress(asyncio.CancelledError):
+            await typing_task
 
 
 def parse_telegram_update(payload: dict[str, Any]) -> ChannelInboundMessage | None:
@@ -134,3 +171,23 @@ async def send_telegram_message(settings: Settings, inbound: ChannelInboundMessa
             json={"chat_id": chat_id, "text": text},
         )
         response.raise_for_status()
+
+
+async def send_telegram_typing_until_cancelled(
+    settings: Settings,
+    inbound: ChannelInboundMessage,
+) -> None:
+    if not settings.telegram_bot_token:
+        return
+    chat_id = inbound.metadata.get("chat_id") or inbound.external_user_id
+    async with httpx.AsyncClient(timeout=10) as client:
+        while True:
+            try:
+                response = await client.post(
+                    f"https://api.telegram.org/bot{settings.telegram_bot_token}/sendChatAction",
+                    json={"chat_id": chat_id, "action": "typing"},
+                )
+                response.raise_for_status()
+            except Exception:
+                logger.warning("Failed to send Telegram typing action", exc_info=True)
+            await asyncio.sleep(4)
