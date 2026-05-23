@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import base64
 import hashlib
 import hmac
@@ -14,7 +15,10 @@ from channel_gateway.app.channels.microsoft_graph_email import (
     graph_message_to_inbound,
     validate_graph_notification_client_state,
 )
-from channel_gateway.app.channels.telegram import parse_telegram_update
+from channel_gateway.app.channels.telegram import (
+    parse_telegram_update,
+    send_telegram_typing_until_cancelled,
+)
 from channel_gateway.app.channels.whatsapp_twilio import parse_twilio_form, validate_twilio_signature
 from channel_gateway.app.config import Settings
 from channel_gateway.app.formatters import format_artifact_summary
@@ -196,3 +200,56 @@ async def test_agent_client_sends_chat_turn_request(monkeypatch) -> None:
     assert captured["url"] == "http://agent.local/api/chat/turn"
     assert captured["json"]["user_id"] == "telegram:1"
     assert response.message == "ok"
+
+
+@pytest.mark.asyncio
+async def test_telegram_typing_sends_chat_action_until_cancelled(monkeypatch) -> None:
+    captured = {}
+
+    class FakeResponse:
+        def raise_for_status(self) -> None:
+            return None
+
+    class FakeAsyncClient:
+        def __init__(self, timeout):
+            captured["timeout"] = timeout
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, exc_type, exc, tb):
+            return None
+
+        async def post(self, url, json):
+            captured["url"] = url
+            captured["json"] = json
+            return FakeResponse()
+
+    async def fake_sleep(seconds):
+        captured["sleep"] = seconds
+        raise asyncio.CancelledError
+
+    monkeypatch.setattr("channel_gateway.app.channels.telegram.httpx.AsyncClient", FakeAsyncClient)
+    monkeypatch.setattr("channel_gateway.app.channels.telegram.asyncio.sleep", fake_sleep)
+
+    inbound = parse_telegram_update(
+        {
+            "message": {
+                "message_id": 42,
+                "text": "find flights",
+                "chat": {"id": 12345},
+            }
+        }
+    )
+    assert inbound is not None
+
+    with pytest.raises(asyncio.CancelledError):
+        await send_telegram_typing_until_cancelled(
+            Settings(telegram_bot_token="token"),
+            inbound,
+        )
+
+    assert captured["timeout"] == 10
+    assert captured["url"] == "https://api.telegram.org/bottoken/sendChatAction"
+    assert captured["json"] == {"chat_id": "12345", "action": "typing"}
+    assert captured["sleep"] == 4

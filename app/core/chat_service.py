@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import time
 import uuid
 from dataclasses import dataclass, field
 from typing import Any, AsyncIterator
@@ -53,13 +54,16 @@ async def stream_chat_events(request: ChatRequest) -> AsyncIterator[dict[str, An
 
 
 async def run_chat_turn(request: ChatRequest) -> ChatRunResult:
+    started = time.perf_counter()
     result = ChatRunResult(
         session_id=request.session_id or "",
         agent=request.agent,
     )
+    event_counts: dict[str, int] = {}
     async for payload in _run_chat(request):
         event_type = payload["event"]
         data = payload["data"]
+        event_counts[event_type] = event_counts.get(event_type, 0) + 1
         if event_type == "session":
             result.session_id = str(data["session_id"])
             result.agent = str(data["agent"])
@@ -75,6 +79,14 @@ async def run_chat_turn(request: ChatRequest) -> ChatRunResult:
                 result.artifacts.append(artifact)
         if event_type not in {"done", "error"}:
             result.events.append(payload)
+    logger.info(
+        "Chat turn completed user_id=%s session_id=%s agent=%s elapsed_s=%.3f events=%s",
+        request.user_id,
+        result.session_id,
+        result.agent,
+        time.perf_counter() - started,
+        event_counts,
+    )
     return result
 
 
@@ -97,6 +109,8 @@ async def _run_chat(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
     )
 
     assistant_text = ""
+    run_started = time.perf_counter()
+    tool_started_at: dict[str, float] = {}
     content = types.Content(
         role="user",
         parts=[types.Part(text=_personalized_message(request.message, personalization_context))],
@@ -132,6 +146,7 @@ async def _run_chat(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
         ):
             await _record_token_usage(session_id, event)
             payload = _event_to_payload(event)
+            _log_chat_event_timing(session_id, payload, run_started, tool_started_at)
             await _record_control_plane_event(session_id, payload)
             await _record_chat_history_event(
                 session_id=session_id,
@@ -156,6 +171,11 @@ async def _run_chat(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
                 text=assistant_text,
             )
         yield {"event": "done", "data": {"session_id": session_id}}
+        logger.info(
+            "Chat run done session_id=%s elapsed_s=%.3f",
+            session_id,
+            time.perf_counter() - run_started,
+        )
         await control_plane.mark_session_done(session_id=session_id, status="ended")
         await chat_history_store.finish_session(session_id=session_id, status="ended")
         asyncio.create_task(
@@ -171,6 +191,42 @@ async def _run_chat(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
         await control_plane.mark_session_done(session_id=session_id, status="failed")
         await chat_history_store.finish_session(session_id=session_id, status="failed")
         yield {"event": "error", "data": {"message": str(exc), "session_id": session_id}}
+
+
+def _log_chat_event_timing(
+    session_id: str,
+    payload: dict[str, Any],
+    run_started: float,
+    tool_started_at: dict[str, float],
+) -> None:
+    event_type = payload["event"]
+    data = payload["data"]
+    if event_type == "tool_call":
+        tool_name = str(data.get("name") or data.get("id") or "unknown_tool")
+        tool_started_at[tool_name] = time.perf_counter()
+        logger.info(
+            "Chat tool call session_id=%s tool=%s elapsed_s=%.3f",
+            session_id,
+            tool_name,
+            time.perf_counter() - run_started,
+        )
+    elif event_type == "tool_response":
+        tool_name = str(data.get("name") or data.get("id") or "unknown_tool")
+        started = tool_started_at.pop(tool_name, None)
+        logger.info(
+            "Chat tool response session_id=%s tool=%s tool_elapsed_s=%s elapsed_s=%.3f",
+            session_id,
+            tool_name,
+            f"{time.perf_counter() - started:.3f}" if started else "unknown",
+            time.perf_counter() - run_started,
+        )
+    elif event_type == "message":
+        logger.info(
+            "Chat message event session_id=%s final=%s elapsed_s=%.3f",
+            session_id,
+            data.get("final"),
+            time.perf_counter() - run_started,
+        )
 
 
 async def _ensure_session(
