@@ -428,23 +428,26 @@ class TravogExpenseService:
         def safe_str(value: Any) -> str:
             return str(value).strip() if value is not None else ""
 
+        candidate_fields: list[tuple[str, str]] = [
+            ("ClientId", safe_str(client_id)),
+            ("UserId", safe_str(user_id)),
+            ("category", safe_str(category)),
+            ("Merchant", safe_str(merchant)),
+            ("DateFrom", safe_str(date_from)),
+            ("DateTo", safe_str(date_to)),
+            ("Amount", safe_str(amount)),
+            ("currency", safe_str(currency)),
+            ("TaxAmount", safe_str(tax_amount)),
+            ("InvoiceNumber", safe_str(invoice_number)),
+            ("GstNumber", safe_str(gst_number)),
+            ("payment_mode", safe_str(payment_mode)),
+            ("Comment", safe_str(comment)),
+            ("ExpenseSheetId", safe_str(expense_sheet_id)),
+            ("IsPersonal", safe_str(is_personal)),
+            ("IsBillable", safe_str(is_billable)),
+        ]
         form_fields: Dict[str, tuple] = {
-            "ClientId": (None, safe_str(client_id)),
-            "UserId": (None, safe_str(user_id)),
-            "category": (None, safe_str(category)),
-            "Merchant": (None, safe_str(merchant)),
-            "DateFrom": (None, safe_str(date_from)),
-            "DateTo": (None, safe_str(date_to)),
-            "Amount": (None, safe_str(amount)),
-            "currency": (None, safe_str(currency)),
-            "TaxAmount": (None, safe_str(tax_amount)),
-            "InvoiceNumber": (None, safe_str(invoice_number)),
-            "GstNumber": (None, safe_str(gst_number)),
-            "payment_mode": (None, safe_str(payment_mode)),
-            "Comment": (None, safe_str(comment)),
-            "ExpenseSheetId": (None, safe_str(expense_sheet_id)),
-            "IsPersonal": (None, safe_str(is_personal)),
-            "IsBillable": (None, safe_str(is_billable)),
+            name: (None, value) for name, value in candidate_fields if value
         }
 
         opened_files = []

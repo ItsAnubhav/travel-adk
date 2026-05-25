@@ -1,6 +1,7 @@
 import React from 'react';
 import FlightFlowView from './FlightFlow';
 import FlightTestPage from '../pages/FlightTestPage';
+import ExpenseReceiptView from '../components/ExpenseReceiptView';
 
 export interface CustomViewSpec {
   view_type: string;
@@ -318,10 +319,34 @@ const ExpenseRows: React.FC<{ rows: any[] }> = ({ rows }) => {
   );
 };
 
+const collectExpenseRows = (payload: any): any[] => {
+  if (!payload || typeof payload !== 'object') return [];
+  const rows: any[] = [];
+  const addRows = (value: any) => {
+    if (Array.isArray(value)) rows.push(...value.filter((item) => item && typeof item === 'object'));
+  };
+
+  addRows(payload.items);
+
+  const data = payload.data;
+  if (data && typeof data === 'object') {
+    addRows(data.data);
+    addRows(data.items);
+  } else {
+    addRows(data);
+  }
+
+  const report = payload.report && typeof payload.report === 'object' ? payload.report : payload;
+  const root = report.Data && typeof report.Data === 'object' ? report.Data : report;
+  ['TripExpense', 'FiledTrip', 'PersonalTrip', 'DeletedTrip'].forEach((key) => addRows(root?.[key]));
+
+  return rows;
+};
+
 const ExpenseReportView: CustomViewComponent = ({ payload }) => {
   // The channel-scoped payload from get_expense_report has a flat .items list
   // (already normalized) plus optional raw .report for legacy Travog shape.
-  const flatItems: any[] = Array.isArray(payload?.items) ? payload.items : [];
+  const flatItems: any[] = collectExpenseRows(payload);
   const reportRoot = payload?.report ?? payload;
   const bucketRoot = reportRoot?.Data ?? reportRoot;
   const bucketGroups: Array<[string, any[]]> = [
@@ -433,5 +458,7 @@ registerView('booking_itinerary_widget', BookingItineraryView);
 registerView('fare_rules', FareRulesView);
 registerView('fare_rules_widget', FareRulesView);
 registerView('cancellation_policy', CancellationPolicyView);
+registerView('expense_item', ExpenseReceiptView);
+registerView('expense_receipt', ExpenseReceiptView);
 registerView('expense_report', ExpenseReportView);
 registerView('expense_settings', ExpenseSettingsView);

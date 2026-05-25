@@ -9,14 +9,29 @@ interface Props {
 const getTotal = (items: ExpenseItem[]) =>
   items.reduce((sum, item) => sum + (item.Amount || 0), 0);
 
+const collectRows = (report: any): ExpenseItem[] => {
+  if (!report || typeof report !== 'object') return [];
+  if (Array.isArray(report.items)) return report.items;
+  if (Array.isArray(report.data)) return report.data;
+  if (Array.isArray(report.data?.data)) return report.data.data;
+  const data = report.Data || {};
+  return [
+    ...(Array.isArray(data.TripExpense) ? data.TripExpense : []),
+    ...(Array.isArray(data.FiledTrip) ? data.FiledTrip : []),
+    ...(Array.isArray(data.PersonalTrip) ? data.PersonalTrip : []),
+    ...(Array.isArray(data.DeletedTrip) ? data.DeletedTrip : []),
+  ];
+};
+
 const ExpenseReportCard: React.FC<Props> = ({ report }) => {
-  const data = report.Data;
+  const data = report.Data || {};
+  const fallbackRows = collectRows(report);
 
   const sections = [
-    { title: 'Trip Expense', items: data.TripExpense },
-    { title: 'Filed Trip', items: data.FiledTrip },
-    { title: 'Personal Trip', items: data.PersonalTrip },
-    { title: 'Deleted Trip', items: data.DeletedTrip }
+    { title: 'Trip Expense', items: Array.isArray(data.TripExpense) ? data.TripExpense : fallbackRows },
+    { title: 'Filed Trip', items: Array.isArray(data.FiledTrip) ? data.FiledTrip : [] },
+    { title: 'Personal Trip', items: Array.isArray(data.PersonalTrip) ? data.PersonalTrip : [] },
+    { title: 'Deleted Trip', items: Array.isArray(data.DeletedTrip) ? data.DeletedTrip : [] }
   ];
 
   return (

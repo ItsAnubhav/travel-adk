@@ -138,7 +138,7 @@ export interface LoginPayload {
   companyId: string;
   accountNo: string;
   userName: string;
-  password: string;
+  password?: string;
   source: string;
   uid?: string;
   subAgentId?: string;

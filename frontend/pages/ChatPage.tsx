@@ -267,7 +267,7 @@ const ChatPage: React.FC<ChatPageProps> = ({ loginPayload, embedMode = false }) 
         rendered.push(<DateSeparator key={`sep-${dateStr}`} date={msg.timestamp} />);
         lastDate = dateStr;
       }
-      rendered.push(<ChatMessage key={msg.id} message={msg} onViewResult={handleViewResult} />);
+      rendered.push(<ChatMessage key={msg.id} message={msg} onViewResult={handleViewResult} onSendMessage={sendMessage} />);
     });
 
     if (isThinking) {

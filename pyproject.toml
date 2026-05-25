@@ -35,6 +35,9 @@ py-modules = ["agent"]
 include = ["app*"]
 exclude = ["services*", "frontend*", "tests*", "scripts*"]
 
+[tool.setuptools.package-data]
+"app.agents" = ["prompts/*.txt"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"

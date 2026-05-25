@@ -160,14 +160,8 @@ const App: React.FC = () => {
     }));
 
     const { password: _password, ...safePayload } = payload;
-    const extendedPayload = {
-      ...safePayload,
-      subAgentId: loginResult.decoded_token_data?.subagent_id,
-      saUserId: loginResult.decoded_token_data?.sa_user_id,
-      companyId: loginResult.decoded_token_data?.company_id || payload.companyId,
-    };
-    setLoginPayload(extendedPayload);
-    localStorage.setItem(LOGIN_SESSION_KEY, JSON.stringify(extendedPayload));
+    setLoginPayload(safePayload);
+    localStorage.setItem(LOGIN_SESSION_KEY, JSON.stringify(safePayload));
     setHasToken(true);
     navigateTo(postLoginPath);
   };

@@ -78,8 +78,9 @@ const scheduleNextRefresh = () => {
 
     const stored = readTokens();
     const expiresAt = accessTokenExpiryMs(stored?.accessToken);
+    const refreshDelay = expiresAt ? expiresAt - Date.now() - REFRESH_BEFORE_EXPIRY_MS : REFRESH_INTERVAL_MS;
     const delay = expiresAt
-        ? Math.max(0, Math.min(REFRESH_INTERVAL_MS, expiresAt - Date.now() - REFRESH_BEFORE_EXPIRY_MS))
+        ? Math.max(1000, Math.min(REFRESH_INTERVAL_MS, refreshDelay))
         : REFRESH_INTERVAL_MS;
 
     timeoutId = window.setTimeout(async () => {
@@ -112,6 +113,12 @@ export const refreshTokenNow = async (): Promise<boolean> => {
         const result = await apiService.refreshToken(stored.refreshToken);
         if (!result.success || !result.accessToken) {
             console.warn('[token-refresh] refresh failed:', result.message);
+            onLogoutCb?.(EXPIRED_SESSION_MESSAGE);
+            return false;
+        }
+
+        if (isAccessTokenExpired({ accessToken: result.accessToken })) {
+            console.warn('[token-refresh] refresh returned an expired access token');
             onLogoutCb?.(EXPIRED_SESSION_MESSAGE);
             return false;
         }

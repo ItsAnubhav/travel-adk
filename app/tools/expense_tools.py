@@ -24,6 +24,67 @@ def _auth_from_context(
     )
 
 
+def _pick(d: dict, *keys: str) -> Any:
+    for key in keys:
+        value = d.get(key)
+        if value not in (None, "", []):
+            return value
+    return None
+
+
+def _format_amount(value: Any) -> str:
+    if isinstance(value, bool):
+        return ""
+    if isinstance(value, (int, float)):
+        return str(int(value)) if float(value).is_integer() else f"{value:g}"
+    return str(value or "")
+
+
+def _format_date(value: Any) -> str:
+    text = str(value or "")
+    return text.split(" ", 1)[0] if " " in text else text
+
+
+def _extract_expense_candidates(payload: Any, limit: int = 20) -> list[dict[str, str]]:
+    """Flatten a get_expense_report payload into a compact LLM-visible candidate list."""
+    if not isinstance(payload, dict):
+        return []
+
+    items: list[dict] = []
+    # Travog current shape: {"data": {"data": [...]}}
+    outer_data = payload.get("data")
+    if isinstance(outer_data, dict) and isinstance(outer_data.get("data"), list):
+        items.extend(outer_data["data"])
+    elif isinstance(outer_data, list):
+        items.extend(outer_data)
+    elif isinstance(payload.get("items"), list):
+        items.extend(payload["items"])
+    else:
+        data_root = payload.get("report") if isinstance(payload.get("report"), dict) else payload
+        buckets_root = data_root.get("Data") if isinstance(data_root.get("Data"), dict) else data_root
+        for bucket_key in ("TripExpense", "FiledTrip", "PersonalTrip", "DeletedTrip"):
+            bucket = buckets_root.get(bucket_key) if isinstance(buckets_root, dict) else None
+            if isinstance(bucket, list):
+                items.extend(bucket)
+
+    candidates: list[dict[str, str]] = []
+    for entry in items[:limit]:
+        if not isinstance(entry, dict):
+            continue
+        expense_id = _pick(entry, "Expense_Id", "expenseId", "id")
+        if expense_id is None:
+            continue
+        candidates.append({
+            "expense_id": str(expense_id),
+            "merchant": str(_pick(entry, "Merchant", "merchant", "merchantName") or ""),
+            "date": _format_date(_pick(entry, "ExpenseDate", "expenseDate", "sort_start_date", "fromDate", "FromDate")),
+            "category": str(_pick(entry, "CategoryName", "categoryName", "category") or ""),
+            "amount": _format_amount(_pick(entry, "Amount", "amount")),
+            "currency": str(_pick(entry, "Currency", "currency", "currencyCode") or ""),
+        })
+    return candidates
+
+
 def _parse_approver_ids(value: list[int] | list[str] | str | int) -> list[int]:
     if isinstance(value, int):
         return [value]
@@ -226,6 +287,7 @@ async def list_expenses(
         payload,
         summary={"page_number": page_number, "page_size": page_size, "category": category},
     )
+    candidates = _extract_expense_candidates(payload)
     return compact_success(
         "Expense report ready",
         ui_tool_payload(
@@ -233,6 +295,8 @@ async def list_expenses(
             artifact_id,
             ui_display=ui_display,
             new_access_token=new_token,
+            candidates=candidates,
+            candidate_count=len(candidates),
         ),
     )
 

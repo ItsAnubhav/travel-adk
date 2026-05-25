@@ -5,7 +5,7 @@ import { Paperclip, Mic, Square, Loader2, SendHorizontal, X, Check, Plus, Image,
 import { useSession } from '../hooks/useSession';
 import { useChat } from '../hooks/useChat';
 import { apiService, ChatHistorySessionSummary } from '../services/api';
-import { AdminSnapshot, ChatMessage, LoginPayload, ResolvedToolView, StreamEvent, ToolInvocation, ToolResult } from '../types';
+import { AdminSnapshot, ChatMessage, LoginPayload, ResolvedToolView, ToolInvocation, ToolResult } from '../types';
 import { CustomView, hasView, type CustomViewSpec } from '../views/registry';
 import { AgenticBoxLogo } from '../components/AgenticBoxLogo';
 
@@ -455,17 +455,12 @@ const AdminPage: React.FC<AdminPageProps> = ({ loginPayload, embedMode = false }
   const [pastSessionsLoading, setPastSessionsLoading] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
 
-  const handleStreamEvent = React.useCallback((event: StreamEvent) => {
-    if (event.type === 'tool_call') setView('flow');
-  }, []);
-
   const { messages, isConnected, isThinking, sendMessage, stopChat } = useChat({
     sessionId: params.sid,
     contextParams: stableContext,
     enabled: true,
     agent: 'root',
     userId: loginPayload?.userName || 'default-user',
-    onStreamEvent: handleStreamEvent,
   });
 
   const startResizing = (e: React.MouseEvent) => {
@@ -724,10 +719,17 @@ const AdminPage: React.FC<AdminPageProps> = ({ loginPayload, embedMode = false }
   const seenResultIdsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    for (const r of richResults) {
-      if (!seenResultIdsRef.current.has(r.id)) {
-        seenResultIdsRef.current.add(r.id);
-      }
+    const seen = seenResultIdsRef.current;
+    const newOnes = richResults.filter((r) => !seen.has(r.id));
+    newOnes.forEach((r) => seen.add(r.id));
+
+    // Only Result View is user-facing enough to auto-open. Avoid yanking focus
+    // for older results restored from local/session history.
+    const now = Date.now();
+    const hasFreshResult = newOnes.some((r) => now - r.timestamp.getTime() < 4000);
+    if (hasFreshResult) {
+      setView('result');
+      setResultOpen(true);
     }
   }, [richResults]);
 
@@ -1711,6 +1713,10 @@ const ChatBubble: React.FC<{
   const fallback = hasResults ? '[rich result — see Result View]' : '';
   const body = message.content || fallback;
   const attachment = (message.metadata as any)?.attachment;
+
+  if (message.role === 'assistant' && !body && !attachment && !hasResults) {
+    return null;
+  }
 
   return (
     <div className={`msg ${message.role === 'user' ? 'user' : 'bot'}`}>

@@ -6,8 +6,10 @@ import {
 import BookingCard from './BookingCard';
 import ExpenseReportCard from './ExpenseReportCard';
 import BookingItineraryWidget from './BookingItineraryWidget';
+import ExpenseReceiptView from './ExpenseReceiptView';
 
 export type RichResultKind =
+  | 'expense_item'
   | 'expense_report'
   | 'expense_settings'
   | 'booking_itinerary'
@@ -24,6 +26,8 @@ export interface RichResult {
 }
 
 const KIND_FROM_VIEW_TYPE: Record<string, RichResultKind> = {
+  expense_item: 'expense_item',
+  expense_receipt: 'expense_item',
   expense_report: 'expense_report',
   expense_settings: 'expense_settings',
   booking_itinerary: 'booking_itinerary',
@@ -34,6 +38,7 @@ const KIND_FROM_VIEW_TYPE: Record<string, RichResultKind> = {
 
 const labelFromKind = (kind: RichResultKind, payload: any): string => {
   switch (kind) {
+    case 'expense_item': return payload?.merchant || payload?.Merchant || 'Expense';
     case 'expense_report': return 'Expense Report';
     case 'expense_settings': return payload?.title || 'Expense Settings';
     case 'booking_itinerary': return payload?.booking_ref ? `Booking ${payload.booking_ref}` : 'Booking Itinerary';
@@ -69,6 +74,16 @@ export function extractRichResults(message: ChatMessageType): RichResult[] {
         id, messageId: message.id, kind: 'expense_report',
         label: 'Expense Report', timestamp,
         data: payload.report || payload,
+      });
+      return;
+    }
+    if (viewType === 'expense_item' || viewType === 'expense_receipt') {
+      seenViewKinds.add('expense_item');
+      out.push({
+        id, messageId: message.id, kind: 'expense_item',
+        label: payload?.merchant || payload?.Merchant || 'Expense',
+        timestamp,
+        data: payload,
       });
       return;
     }
@@ -193,6 +208,8 @@ const FareRulesWidgetView: React.FC<{ payload: any }> = ({ payload }) => {
 
 export const RichResultRenderer: React.FC<{ result: RichResult }> = ({ result }) => {
   switch (result.kind) {
+    case 'expense_item':
+      return <ExpenseReceiptView payload={result.data} />;
     case 'expense_report':
       return <ExpenseReportCard report={result.data} />;
     case 'expense_settings':

@@ -17,6 +17,7 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 import { extractRichResults, RichResult } from './RichResultRenderer';
+import UserChoicePrompt from './UserChoicePrompt';
 
 const ReceiptAttachment: React.FC<{ filename: string; path: string }> = ({ filename }) => {
   const isPdf = filename.toLowerCase().endsWith('.pdf');
@@ -155,9 +156,34 @@ const ResultButtons: React.FC<{
 interface ChatMessageProps {
   message: ChatMessageType;
   onViewResult?: (resultId: string) => void;
+  onSendMessage?: (text: string) => void;
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = ({ message, onViewResult }) => {
+interface ChoicePrompt {
+  question: string;
+  options: string[];
+  allowFreeText: boolean;
+}
+
+const extractChoicePrompt = (message: ChatMessageType): ChoicePrompt | null => {
+  for (const tool of message.toolResults || []) {
+    if ((tool as any).ui_component !== 'user_choice_prompt') continue;
+    const payload: any = (tool as any).payload || {};
+    const question = typeof payload.question === 'string' ? payload.question : '';
+    const options = Array.isArray(payload.options)
+      ? payload.options.filter((o: unknown): o is string => typeof o === 'string' && o.trim() !== '')
+      : [];
+    if (!question || options.length === 0) continue;
+    return {
+      question,
+      options,
+      allowFreeText: payload.allow_free_text !== false,
+    };
+  }
+  return null;
+};
+
+const ChatMessage: React.FC<ChatMessageProps> = ({ message, onViewResult, onSendMessage }) => {
   const isAssistant = message.role === 'assistant';
   const [copied, setCopied] = useState(false);
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
@@ -177,6 +203,16 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, onViewResult }) => {
   };
 
   const richResults = useMemo(() => extractRichResults(message), [message]);
+  const choicePrompt = useMemo(() => extractChoicePrompt(message), [message]);
+  const hasRenderableAssistantContent = Boolean(
+    message.content.trim() ||
+    richResults.length ||
+    choicePrompt ||
+    message.toolResults?.length ||
+    message.metadata?.image_path,
+  );
+
+  if (isAssistant && !hasRenderableAssistantContent) return null;
 
   return (
     <div className={`flex w-full px-4 py-2 md:px-8 ${isAssistant ? 'justify-start' : 'justify-end'}`}>
@@ -208,6 +244,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, onViewResult }) => {
               )}
             </div>
 
+            {isAssistant && choicePrompt && onSendMessage && (
+              <UserChoicePrompt
+                question={choicePrompt.question}
+                options={choicePrompt.options}
+                allowFreeText={choicePrompt.allowFreeText}
+                onSelect={onSendMessage}
+              />
+            )}
             {isAssistant && (
               <ResultButtons results={richResults} onViewResult={onViewResult} />
             )}

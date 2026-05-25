@@ -1,0 +1,18 @@
+{
+    "success": true,
+    "message": "Token Data fetched successfully.",
+    "data": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55SWQiOiJRTEFCUzEyMzQ1IiwidXNlck5hbWUiOiJBbnVqIEFJIiwiY2xpZW50SWQiOiIxNTAwOTYiLCJ1c2VySWQiOiIzMDU1MDMiLCJicmFuY2hJZCI6IjE0MTYiLCJiMmJCcmFuY2hJZCI6Ijk1NjAxIiwiY29tcGFueUN1cnJlbmN5IjoiR0JQIiwiYWNjb3VudE5vIjoiUUxBQlMxMjM0NTAwMDE1MDA5NiIsImRlY2ltYWxQcmVmZXJlbmNlIjoiMiIsImxvZ2luU2Vzc2lvbklkIjoiZDk0NTU2MWE1NTE2NDA1ZGE0ZWQ5NzhmMzJkZDk5MDkiLCJkdXBsaWNhdGVMb2dpbiI6IkZhbHNlIiwic291cmNlIjoiU0JUIiwiZGJDb21wYW55SWQiOiJuamd5N21WNW5ZeVpWL2lDWkRBN0RueTcvZ3Z4YmJEaS9ENDg1V3kyMlFzPSIsImRiVXNlciI6IkRjM3IzTzM0QmNvSExBSUprNHpJNm1Jc3dtYVBucGQ5T0RnSVNBaXd5M3c9IiwiZGJQYXNzd29yZCI6InFxOTBNekdCQW1QV3V5K0MycHR4OHU4TVkrUUNTN05BUnE4MXFMREhiS2M9IiwianRpIjoiY2JlMmE1NTItNmY1Ni00ZTMwLThhY2EtNWFkNjY5NGUxODU2IiwibmJmIjoxNzc5NjM4MDUzLCJleHAiOjE4MTExNzgyMzYsImlhdCI6MTc3OTYzODA1MywiaXNzIjoiUXVhZGxhYnNYY2hhbmdlIiwiYXVkIjoiUXVhZGxhYnNYY2hhbmdlQ2xpZW50In0.I78c1ItbB2GY7TP7n1HoVCZ3dBfJUmOfv7DDbGPB-xo",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55SWQiOiJRTEFCUzEyMzQ1IiwidXNlck5hbWUiOiJBbnVqIEFJIiwiY2xpZW50SWQiOiIxNTAwOTYiLCJ1c2VySWQiOiIzMDU1MDMiLCJicmFuY2hJZCI6IjE0MTYiLCJiMmJCcmFuY2hJZCI6Ijk1NjAxIiwiY29tcGFueUN1cnJlbmN5IjoiR0JQIiwiYWNjb3VudE5vIjoiUUxBQlMxMjM0NTAwMDE1MDA5NiIsImRlY2ltYWxQcmVmZXJlbmNlIjoiMiIsImxvZ2luU2Vzc2lvbklkIjoiZDk0NTU2MWE1NTE2NDA1ZGE0ZWQ5NzhmMzJkZDk5MDkiLCJkdXBsaWNhdGVMb2dpbiI6IkZhbHNlIiwic291cmNlIjoiU0JUIiwibmJmIjoxNzc5NjM4MDUzLCJleHAiOjE3ODAyNDI4NTMsImlhdCI6MTc3OTYzODA1MywiaXNzIjoiUXVhZGxhYnNYY2hhbmdlIiwiYXVkIjoiUXVhZGxhYnNYY2hhbmdlQ2xpZW50In0.XBSHvUzYl5p1fuY0qj91UCi6_7TC64-teilSsnMQTtM",
+        "accessTokenExpiresIn": "2027-05-24T17:03:56+05:30",
+        "refreshTokenExpiresIn": "2027-05-24T17:03:56+05:30"
+    },
+    "decoded_token_data": {
+        "company_id": "QLABS12345",
+        "subagent_id": "150096",
+        "sa_user_id": "305503",
+        "user_name": "Anuj AI",
+        "account_no": "QLABS12345000150096",
+        "company_currency": "GBP"
+    }
+}

@@ -184,13 +184,6 @@ export const useChat = ({
         timestamp: new Date(),
         metadata: { ...metadata, messageId },
       },
-      {
-        id: `assistant-${messageId}`,
-        role: 'assistant',
-        content: '',
-        timestamp: new Date(),
-        isStreaming: true,
-      },
     ]);
 
     setIsThinking(true);

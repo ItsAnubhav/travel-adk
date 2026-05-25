@@ -10,41 +10,21 @@ const REFRESH_API_URL = (import.meta.env.VITE_REFRESH_API_URL || `${API_BASE}/au
 interface LoginApiResponse {
     success?: boolean;
     message?: string;
-    decoded_token_data?: {
-        company_id?: string;
-        subagent_id?: string;
-        sa_user_id?: string;
-        user_name?: string;
-    };
     data?: {
         accessToken?: string;
         refreshToken?: string;
         accessTokenExpiresIn?: string;
         refreshTokenExpiresIn?: string;
-        uid?: string;
-        subAgentId?: string;
-        saUserId?: string;
-        corporateId?: string;
     };
 }
 
 interface LoginResult {
     success: boolean;
     message: string;
-    decoded_token_data?: {
-        company_id?: string;
-        subagent_id?: string;
-        sa_user_id?: string;
-        user_name?: string;
-    };
     accessToken?: string;
     refreshToken?: string;
     accessTokenExpiresIn?: string;
     refreshTokenExpiresIn?: string;
-    uid?: string;
-    subAgentId?: string;
-    saUserId?: string;
-    corporateId?: string;
 }
 
 export const apiService = {
@@ -376,7 +356,6 @@ export const apiService = {
             return {
                 success: true,
                 message: body.message || 'Login successful',
-                decoded_token_data: body.decoded_token_data,
                 ...body.data
             };
         } catch (error) {
@@ -421,7 +400,6 @@ export const apiService = {
             return {
                 success: true,
                 message: body.message || 'Refresh successful',
-                decoded_token_data: body.decoded_token_data,
                 ...body.data
             };
         } catch (error) {

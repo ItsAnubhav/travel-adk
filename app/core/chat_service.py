@@ -18,6 +18,7 @@ from app.agents.root import AGENT_REGISTRY
 from app.config import get_settings
 from app.core.chat_history import chat_history_store
 from app.core.control_plane import control_plane
+from app.core.jwt_utils import IDENTITY_FIELDS, extract_identity
 from app.core.memory import get_memory_service
 from app.core.personalization import format_agent_personalization, get_personalization_service
 from app.schemas.chat import ChatRequest
@@ -95,6 +96,13 @@ async def _run_chat(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
     settings = get_settings()
     if not await control_plane.is_agent_enabled(request.agent):
         raise HTTPException(status_code=403, detail=f"Agent {request.agent} is disabled")
+
+    identity = extract_identity(request.context.get("access_token"))
+    if identity.get("user_id"):
+        request.user_id = identity["user_id"]
+    for key in IDENTITY_FIELDS:
+        if identity.get(key):
+            request.context[key] = identity[key]
 
     session_id = request.session_id or str(uuid.uuid4())
     chat_runner = runner(request.agent)
@@ -338,6 +346,11 @@ def _request_state_delta(
         state["travog_access_token"] = access_token.strip()
     if isinstance(refresh_token, str) and refresh_token.strip():
         state["travog_refresh_token"] = refresh_token.strip()
+
+    for key in IDENTITY_FIELDS:
+        value = context.get(key)
+        if isinstance(value, str) and value.strip():
+            state[key] = value.strip()
 
     profile = personalization_context.get("profile")
     preferences = personalization_context.get("preferences")
