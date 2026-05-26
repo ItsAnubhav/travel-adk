@@ -225,6 +225,11 @@ class ControlPlane:
                 name="Suggest user preference",
                 description="Creates a pending preference when a user states a durable travel preference.",
             ),
+            "search_company_documents": ToolRecord(
+                id="search_company_documents",
+                name="Search company documents",
+                description="Searches uploaded company policy, HR, holiday, and manual documents.",
+            ),
             "list_trip": ToolRecord(
                 id="list_trip",
                 name="List trips",

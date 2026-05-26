@@ -81,10 +81,11 @@ async def login(request: LoginRequest) -> dict:
     settings = get_settings()
 
     if settings.auth_api_base_url:
+        base_url = settings.auth_api_base_url.rstrip("/")
         async with httpx.AsyncClient(timeout=30) as client:
             response = await client.post(
-                f"{settings.auth_api_base_url}/api/auth/jwt/generateLoginToken",
-                json=request.model_dump(),
+                f"{base_url}/forge/api/v1/auth/jwt/login",
+                json={**request.model_dump(), "accountNo": ""},
             )
         try:
             payload = response.json()
@@ -100,9 +101,10 @@ async def refresh(request: RefreshRequest) -> dict:
     settings = get_settings()
 
     if settings.auth_api_base_url:
+        base_url = settings.auth_api_base_url.rstrip("/")
         async with httpx.AsyncClient(timeout=30) as client:
             response = await client.post(
-                f"{settings.auth_api_base_url}/api/auth/Jwt/refreshLoginToken",
+                f"{base_url}/forge/api/v1/auth/jwt/refresh",
                 json=request.model_dump(),
             )
         try:

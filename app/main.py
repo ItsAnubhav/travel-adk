@@ -3,11 +3,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import admin, artifacts, auth, chat, health, personalization
+from app.api import admin, artifacts, auth, chat, health, personalization, rag
 from app.config import get_settings
 from app.core.chat_history import chat_history_store
 from app.core.control_plane import control_plane
 from app.core.logging import configure_logging
+from app.core.rag import rag_store
 
 configure_logging()
 settings = get_settings()
@@ -17,6 +18,7 @@ settings = get_settings()
 async def lifespan(app: FastAPI):
     await control_plane.initialize()
     await chat_history_store.initialize()
+    await rag_store.initialize()
     yield
 
 
@@ -36,3 +38,4 @@ app.include_router(chat.router, prefix="/api")
 app.include_router(artifacts.router, prefix="/api")
 app.include_router(personalization.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
+app.include_router(rag.router, prefix="/api")

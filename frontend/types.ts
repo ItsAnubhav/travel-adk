@@ -146,6 +146,21 @@ export interface LoginPayload {
   corporateId?: string;
 }
 
+export interface RagDocument {
+  id: string;
+  company_id: string;
+  filename: string;
+  file_type: string;
+  content_type: string;
+  status: 'indexing' | 'indexed' | 'failed' | string;
+  source_count: number;
+  chunk_count: number;
+  error_message?: string | null;
+  uploaded_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Flight {
   id: string;
   airline: string;

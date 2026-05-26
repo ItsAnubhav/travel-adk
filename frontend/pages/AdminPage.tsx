@@ -126,7 +126,7 @@ interface RichResultRef {
 const RESULT_VIEW_EXCLUDED_VIEW_TYPES = new Set<string>([
   'expense_settings',
 ]);
-type SidebarTab = 'all' | 'agents' | 'tools' | 'manage' | 'sessions';
+type SidebarTab = 'all' | 'agents' | 'tools' | 'sessions';
 
 const AGENT_ICON_BG: Record<string, string> = {
   root: '#4F46E5',
@@ -244,6 +244,7 @@ const AGENT_LABELS: Record<string, { display_name: string; description: string; 
 const FALLBACK_TOOL_RECORDS = [
   { id: 'get_user_preferences', name: 'Get user preferences', description: 'Loads durable travel preferences for the active user.', kind: 'builtin', status: 'enabled' },
   { id: 'suggest_user_preference', name: 'Suggest user preference', description: 'Creates a pending preference when a user states a durable travel preference.', kind: 'builtin', status: 'enabled' },
+  { id: 'search_company_documents', name: 'Search company documents', description: 'Searches uploaded company HR, holiday, policy, and manual documents.', kind: 'builtin', status: 'enabled' },
   { id: 'list_trip', name: 'List trips', description: 'Lists Travog trips visible to the authenticated user.', kind: 'builtin', status: 'enabled' },
   { id: 'get_trip_approvers', name: 'Get trip approvers', description: 'Fetches approvers for a Travog trip.', kind: 'builtin', status: 'enabled' },
   { id: 'send_trip_for_approval', name: 'Send trip for approval', description: 'Submits a trip to selected approvers.', kind: 'builtin', status: 'enabled' },
@@ -375,6 +376,7 @@ const iconNameForTool = (toolId: string): string => {
   if (id.includes('booking')) return 'ticket';
   if (id.includes('fare') || id.includes('policy')) return 'scroll-text';
   if (id.includes('memory') || id.includes('preference')) return 'brain';
+  if (id.includes('document') || id.includes('policy') || id.includes('manual')) return 'library';
   if (id.includes('search')) return 'globe';
   return 'wrench';
 };
@@ -397,6 +399,7 @@ const AdminPage: React.FC<AdminPageProps> = ({ loginPayload, embedMode = false }
     const base: Record<string, any> = {
       company_id: loginPayload?.companyId || params.cId,
       accountNo: loginPayload?.accountNo,
+      name: loginPayload?.userName,
       user_name: loginPayload?.userName,
       source: loginPayload?.source,
       uid: loginPayload?.uid,
@@ -582,13 +585,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ loginPayload, embedMode = false }
       setToolDocsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (sbTab !== 'manage') return;
-    if (toolDocs !== null) return;
-    refreshToolDocs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sbTab]);
 
   const refreshPastSessions = async () => {
     const userId = loginPayload?.userName || 'default-user';
@@ -1218,23 +1214,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ loginPayload, embedMode = false }
                 <ViewTab id="trace" current={view} onSelect={setView} label="Trace View" />
                 <ViewTab id="flow" current={view} onSelect={setView} label="Flow View" badge={auditLogs.length} />
                 <ViewTab id="result" current={view} onSelect={setView} label="Result View" badge={richResults.length || undefined} />
-                <div className="right">
-                  <button className="btn-soft" onClick={() => window.location.reload()}>Replay</button>
-                  <button
-                    className="btn-soft"
-                    onClick={() => {
-                      const blob = new Blob([JSON.stringify({ messages, auditLogs }, null, 2)], { type: 'application/json' });
-                      const url = URL.createObjectURL(blob);
-                      const a = document.createElement('a');
-                      a.href = url;
-                      a.download = `aiva-${params.sid}.json`;
-                      a.click();
-                      URL.revokeObjectURL(url);
-                    }}
-                  >
-                    Export JSON
-                  </button>
-                </div>
               </div>
             )}
 
@@ -1271,7 +1250,7 @@ const AdminPage: React.FC<AdminPageProps> = ({ loginPayload, embedMode = false }
             <span className="sub">{catalog?.agents.length ?? 0} · {catalog?.tool_count ?? 0}</span>
           </div>
           <div className="sb-tabs">
-            {(['all', 'agents', 'tools', 'manage', 'sessions'] as SidebarTab[]).map((k) => (
+            {(['all', 'agents', 'tools', 'sessions'] as SidebarTab[]).map((k) => (
               <div key={k} className={`tab ${sbTab === k ? 'active' : ''}`} onClick={() => setSbTab(k)}>
                 {k.charAt(0).toUpperCase() + k.slice(1)}
               </div>
@@ -1410,19 +1389,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ loginPayload, embedMode = false }
                   <div className="sb-search-summary">{totalFilteredTools} tool{totalFilteredTools === 1 ? '' : 's'} match</div>
                 )}
               </>
-            )}
-
-            {sbTab === 'manage' && (
-              <ToolManageList
-                docs={toolDocs}
-                loading={toolDocsLoading}
-                search={sbSearch}
-                sbMatches={sbMatches}
-                onToggle={toggleToolEnabled}
-                onEdit={(doc) => setEditingTool(doc)}
-                onReseed={reseedTools}
-                onRefresh={refreshToolDocs}
-              />
             )}
 
             {sbTab === 'sessions' && (
@@ -3015,11 +2981,11 @@ const ADMIN_STYLES = `
 }
 .aiva-admin-root .sb-head .sub { color: var(--muted); font-weight: 400; font-size: 12px; }
 .aiva-admin-root .sb-tabs {
-  display: flex; gap: 4px; padding: 10px 12px 0;
+  display: flex; flex-wrap: wrap; gap: 4px; padding: 10px 12px 0;
   border-bottom: 1px solid var(--line); flex-shrink: 0;
 }
 .aiva-admin-root .sb-tabs .tab {
-  padding: 7px 11px; font-size: 12px; border-radius: 8px 8px 0 0;
+  padding: 7px 9px; font-size: 12px; border-radius: 8px 8px 0 0;
   cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px;
 }
 .aiva-admin-root .sb-tabs .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
@@ -3115,6 +3081,7 @@ const ADMIN_STYLES = `
 .aiva-admin-root .sb-manage-actions { display: flex; gap: 8px; padding: 8px 12px 4px; }
 .aiva-admin-root .item.disabled { opacity: 0.65; }
 .aiva-admin-root .btn-soft.primary { background: var(--accent); color: white; }
+.aiva-admin-root .btn-soft svg { vertical-align: -2px; margin-right: 4px; }
 .aiva-admin-root .btn-soft.logout-btn {
   color: var(--red);
   border-color: rgba(239, 68, 68, 0.3);
@@ -3126,6 +3093,145 @@ const ADMIN_STYLES = `
 .aiva-admin-root .btn-soft.logout-btn:hover {
   background: rgba(239, 68, 68, 0.08);
   border-color: var(--red);
+}
+
+.aiva-admin-root .doc-panel { display: flex; flex-direction: column; gap: 10px; }
+.aiva-admin-root .doc-upload {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  border: 1px dashed #b9c3d6;
+  border-radius: 10px;
+  padding: 10px;
+  background: #f8fafc;
+  transition: border-color .15s, background .15s;
+}
+.aiva-admin-root .doc-upload.dragging {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.aiva-admin-root .doc-upload-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0f2fe;
+  color: #0369a1;
+}
+.aiva-admin-root .doc-upload-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.aiva-admin-root .doc-upload-copy strong {
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.2;
+}
+.aiva-admin-root .doc-upload-copy span {
+  font-size: 10.5px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aiva-admin-root .doc-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 8px 9px;
+  border-radius: 9px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+.aiva-admin-root .doc-note svg { flex: 0 0 auto; margin-top: 1px; }
+.aiva-admin-root .doc-error {
+  padding: 8px 9px;
+  border-radius: 9px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+.aiva-admin-root .doc-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--panel);
+  margin-bottom: 8px;
+}
+.aiva-admin-root .doc-item.failed { border-color: rgba(239, 68, 68, .35); }
+.aiva-admin-root .doc-item-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.aiva-admin-root .doc-file-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ecfeff;
+  color: #0e7490;
+  flex: 0 0 auto;
+}
+.aiva-admin-root .doc-file-main { flex: 1 1 auto; min-width: 0; }
+.aiva-admin-root .doc-file-name {
+  font-size: 12.5px;
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aiva-admin-root .doc-file-meta {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.aiva-admin-root .doc-status {
+  font-size: 9.5px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: var(--muted);
+  background: #f1f5f9;
+}
+.aiva-admin-root .doc-status.indexed { color: #15803d; background: var(--green-soft); }
+.aiva-admin-root .doc-status.indexing { color: #0369a1; background: #e0f2fe; }
+.aiva-admin-root .doc-status.failed { color: #b91c1c; background: #fee2e2; }
+.aiva-admin-root .doc-error-inline {
+  margin-top: 8px;
+  color: #b91c1c;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.aiva-admin-root .doc-item-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  color: var(--muted);
+  font-size: 10.5px;
+}
+.aiva-admin-root .icon-btn.danger {
+  color: var(--red);
+  border-color: rgba(239, 68, 68, .3);
+  background: white;
+}
+.aiva-admin-root .icon-btn.danger:hover {
+  background: rgba(239, 68, 68, .08);
 }
 
 .tool-edit-overlay {

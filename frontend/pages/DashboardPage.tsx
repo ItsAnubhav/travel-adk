@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Activity,
   AlertCircle,
   CheckCircle2,
   Clock3,
   DatabaseZap,
+  FileText,
   Globe2,
   PlugZap,
   Plus,
@@ -12,11 +13,12 @@ import {
   RefreshCw,
   Search,
   ServerCog,
-  Shield,
+  Trash2,
+  UploadCloud,
   Wrench,
 } from 'lucide-react';
 import { apiService } from '../services/api';
-import { AdminRecord, AdminSnapshot } from '../types';
+import { AdminRecord, AdminSnapshot, LoginPayload, RagDocument } from '../types';
 
 const emptySnapshot: AdminSnapshot = {
   metrics: {
@@ -39,13 +41,23 @@ const emptySnapshot: AdminSnapshot = {
 
 type NewToolKind = 'api' | 'mcp';
 
-const DashboardPage: React.FC = () => {
+interface DashboardPageProps {
+  loginPayload: LoginPayload;
+}
+
+const DashboardPage: React.FC<DashboardPageProps> = ({ loginPayload }) => {
   const [snapshot, setSnapshot] = useState<AdminSnapshot>(emptySnapshot);
   const [query, setQuery] = useState('');
+  const [documentQuery, setDocumentQuery] = useState('');
   const [toolSaving, setToolSaving] = useState<Record<string, boolean>>({});
   const [globalSaving, setGlobalSaving] = useState(false);
   const [wsConnected, setWsConnected] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [ragDocuments, setRagDocuments] = useState<RagDocument[] | null>(null);
+  const [ragDocumentsLoading, setRagDocumentsLoading] = useState(false);
+  const [ragUploading, setRagUploading] = useState(false);
+  const [ragUploadError, setRagUploadError] = useState<string | null>(null);
+  const ragInputRef = useRef<HTMLInputElement>(null);
   const [newTool, setNewTool] = useState({
     id: '',
     name: '',
@@ -59,6 +71,20 @@ const DashboardPage: React.FC = () => {
   const refreshSnapshot = async () => {
     const next = await apiService.fetchAdminSnapshot();
     if (next) setSnapshot(next);
+  };
+
+  const refreshRagDocuments = async () => {
+    if (!loginPayload.companyId) {
+      setRagDocuments([]);
+      return;
+    }
+    setRagDocumentsLoading(true);
+    try {
+      const docs = await apiService.listRagDocuments(loginPayload.companyId);
+      setRagDocuments(docs || []);
+    } finally {
+      setRagDocumentsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -76,6 +102,11 @@ const DashboardPage: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    refreshRagDocuments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginPayload.companyId]);
+
   const filteredTools = useMemo(() => {
     const needle = query.trim().toLowerCase();
     if (!needle) return snapshot.tools;
@@ -85,6 +116,17 @@ const DashboardPage: React.FC = () => {
       ),
     );
   }, [snapshot.tools, query]);
+
+  const filteredDocuments = useMemo(() => {
+    const needle = documentQuery.trim().toLowerCase();
+    const docs = ragDocuments || [];
+    if (!needle) return docs;
+    return docs.filter((doc) =>
+      [doc.filename, doc.file_type, doc.status, doc.error_message].some((value) =>
+        String(value || '').toLowerCase().includes(needle),
+      ),
+    );
+  }, [ragDocuments, documentQuery]);
 
   const activeSessions = snapshot.sessions.filter((session) => session.status === 'active');
   const runningCalls = snapshot.tool_invocations.filter((call) => call.status === 'running');
@@ -149,6 +191,37 @@ const DashboardPage: React.FC = () => {
     });
     setMessage('Tool added in disabled mode. Enable it when it is ready.');
     await refreshSnapshot();
+  };
+
+  const uploadRagDocument = async (file?: File) => {
+    if (!file || ragUploading) return;
+    setRagUploadError(null);
+    setRagUploading(true);
+    try {
+      const document = await apiService.uploadRagDocument(file, {
+        companyId: loginPayload.companyId,
+        uploadedBy: loginPayload.userName || 'admin',
+      });
+      if (document) {
+        setRagDocuments((current) => [document, ...(current || [])]);
+      }
+      await refreshRagDocuments();
+    } catch (error) {
+      setRagUploadError(error instanceof Error ? error.message : 'Document upload failed.');
+    } finally {
+      setRagUploading(false);
+      if (ragInputRef.current) ragInputRef.current.value = '';
+    }
+  };
+
+  const deleteRagDocument = async (documentId: string) => {
+    if (!window.confirm('Delete this document from company knowledge?')) return;
+    const ok = await apiService.deleteRagDocument(documentId, loginPayload.companyId);
+    if (!ok) {
+      setRagUploadError('Could not delete document.');
+      return;
+    }
+    setRagDocuments((current) => (current || []).filter((doc) => doc.id !== documentId));
   };
 
   return (
@@ -246,7 +319,7 @@ const DashboardPage: React.FC = () => {
         <section className="panel tools-panel">
           <div className="panel-head">
             <div>
-              <h2>Global Tools</h2>
+              <h2>Manage Tools</h2>
               <p>Enable or disable tool availability for every session.</p>
             </div>
             <button className="primary-action" onClick={toggleAllTools} disabled={globalSaving || snapshot.tools.length === 0}>
@@ -279,6 +352,70 @@ const DashboardPage: React.FC = () => {
                 </article>
               );
             })}
+          </div>
+        </section>
+
+        <section className="panel documents-panel">
+          <div className="panel-head">
+            <div>
+              <h2>Documents</h2>
+              <p>Upload company knowledge for chatbot answers.</p>
+            </div>
+            <div className="document-actions">
+              <input
+                ref={ragInputRef}
+                type="file"
+                accept=".pdf,.txt,.docx,application/pdf,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                style={{ display: 'none' }}
+                onChange={(event) => uploadRagDocument(event.target.files?.[0])}
+              />
+              <button className="primary-action" onClick={() => ragInputRef.current?.click()} disabled={ragUploading || !loginPayload.companyId}>
+                {ragUploading ? <RefreshCw size={16} className="spin" /> : <UploadCloud size={16} />}
+                {ragUploading ? 'Indexing' : 'Upload'}
+              </button>
+              <button className="icon-btn" onClick={refreshRagDocuments} title="Refresh documents" disabled={ragDocumentsLoading}>
+                <RefreshCw size={17} className={ragDocumentsLoading ? 'spin' : ''} />
+              </button>
+            </div>
+          </div>
+          <div className="document-note">
+            <AlertCircle size={16} />
+            <span>Only text-based PDFs are supported. Scanned/image PDFs are not supported yet. TXT and DOCX files are also supported.</span>
+          </div>
+          {ragUploadError && (
+            <div className="notice document-error">
+              <AlertCircle size={16} />
+              {ragUploadError}
+            </div>
+          )}
+          <label className="search-box">
+            <Search size={16} />
+            <input value={documentQuery} onChange={(event) => setDocumentQuery(event.target.value)} placeholder="Search documents" />
+          </label>
+          <div className="document-list">
+            {ragDocumentsLoading && !ragDocuments ? (
+              <div className="empty-state">Loading documents...</div>
+            ) : filteredDocuments.length ? filteredDocuments.map((doc) => (
+              <article className={`document-card ${doc.status}`} key={doc.id}>
+                <div className="document-main">
+                  <span className="document-icon"><FileText size={18} /></span>
+                  <div>
+                    <strong title={doc.filename}>{doc.filename}</strong>
+                    <p>{doc.file_type.toUpperCase()} · {doc.chunk_count} chunks · {formatDateTime(doc.updated_at)}</p>
+                  </div>
+                </div>
+                <div className="document-foot">
+                  <span className={`doc-status ${doc.status}`}>{doc.status}</span>
+                  <span>{doc.source_count} source{doc.source_count === 1 ? '' : 's'}</span>
+                  <button className="icon-btn danger" onClick={() => deleteRagDocument(doc.id)} title="Delete document">
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+                {doc.error_message && <div className="document-inline-error">{doc.error_message}</div>}
+              </article>
+            )) : (
+              <div className="empty-state">{documentQuery ? 'No matching documents.' : 'No company documents uploaded yet.'}</div>
+            )}
           </div>
         </section>
 
@@ -333,6 +470,13 @@ const formatTime = (value?: string | null) => {
   const parsed = new Date(value);
   if (Number.isNaN(parsed.getTime())) return '-';
   return parsed.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+};
+
+const formatDateTime = (value?: string | null) => {
+  if (!value) return '-';
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return '-';
+  return parsed.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 };
 
 const statusIcon = (status: string) => {
@@ -448,7 +592,7 @@ h2 { font-size: 16px; }
   min-width: 0;
   box-shadow: 0 16px 40px rgba(46, 54, 42, .06);
 }
-.tools-panel { grid-column: 1 / 2; }
+.tools-panel, .documents-panel { grid-column: 1 / 2; }
 .add-panel, .calls-panel { grid-column: 2 / 3; }
 .panel-head {
   justify-content: space-between;
@@ -653,10 +797,109 @@ code {
   color: #f7fff8;
   border-color: #173b32;
 }
+.document-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.spin { animation: dash-spin .85s linear infinite; }
+@keyframes dash-spin { to { transform: rotate(360deg); } }
+.document-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 11px 12px;
+  border: 1px solid #f0d49b;
+  background: #fff8e8;
+  color: #7a5316;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+.document-note svg { flex: 0 0 auto; margin-top: 1px; }
+.document-error { margin-bottom: 12px; }
+.document-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+}
+.document-card {
+  border: 1px solid #e2e6dd;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfaf4;
+}
+.document-card.indexed { border-color: #a8d6b6; background: #f6fff7; }
+.document-card.failed { border-color: #efb2a9; background: #fff7f5; }
+.document-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.document-main div { min-width: 0; }
+.document-main strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.document-main p {
+  margin-top: 3px;
+  color: #6c7568;
+  font-size: 12px;
+}
+.document-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #eaf6f0;
+  color: #176341;
+  flex: 0 0 auto;
+}
+.document-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #e7ebe1;
+  color: #687466;
+  font-size: 12px;
+}
+.doc-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #edf3e7;
+  color: #36513b;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.doc-status.indexed { color: #0f7a43; background: #effbf3; }
+.doc-status.indexing { color: #075985; background: #e0f2fe; }
+.doc-status.failed { color: #a83224; background: #fee2e2; }
+.icon-btn.danger {
+  margin-left: auto;
+  color: #b4362a;
+  border-color: #efc0ba;
+}
+.icon-btn.danger:hover { background: #fff1ef; border-color: #b4362a; }
+.document-inline-error {
+  margin-top: 10px;
+  color: #a83224;
+  font-size: 12px;
+  line-height: 1.4;
+}
 @media (max-width: 1100px) {
   .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dash-layout { grid-template-columns: 1fr; }
-  .tools-panel, .add-panel, .calls-panel { grid-column: auto; }
+  .tools-panel, .documents-panel, .add-panel, .calls-panel { grid-column: auto; }
 }
 @media (max-width: 640px) {
   .dashboard-root { padding: 16px; }

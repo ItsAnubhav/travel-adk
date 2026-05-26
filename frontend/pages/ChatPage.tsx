@@ -58,6 +58,7 @@ const ChatPage: React.FC<ChatPageProps> = ({ loginPayload, embedMode = false }) 
     const base: Record<string, any> = {
       company_id: loginPayload.companyId || params.cId,
       accountNo: loginPayload.accountNo,
+      name: loginPayload.userName,
       user_name: loginPayload.userName,
       source: loginPayload.source,
       uid: loginPayload.uid,

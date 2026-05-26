@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     database_url: str
     backend_cors_origins: str
     auth_api_base_url: str
+    rag_embedding_model: str = "openai/text-embedding-3-small"
+    rag_embedding_dimension: int = 1536
+    rag_top_k: int = 5
+    rag_max_upload_mb: int = 25
 
     @property
     def effective_llm_model(self) -> str:

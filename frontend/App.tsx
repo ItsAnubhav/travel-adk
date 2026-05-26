@@ -212,10 +212,10 @@ const App: React.FC = () => {
   }
 
   if (currentPath === DASHBOARD_PATH) {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !loginPayload) {
       return <LoginPage onLogin={handleLogin} initialErrorMessage={authMessage} />;
     }
-    return <DashboardPage />;
+    return <DashboardPage loginPayload={loginPayload} />;
   }
 
   if (currentPath === LOGIN_PATH && !isAuthenticated) {

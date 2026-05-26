@@ -1,5 +1,5 @@
 
-import { AdminSnapshot, AgentKey, ChatMessage, LoginPayload, StreamEvent } from '../types';
+import { AdminSnapshot, AgentKey, ChatMessage, LoginPayload, RagDocument, StreamEvent } from '../types';
 
 
 export const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
@@ -324,7 +324,7 @@ export const apiService = {
                 },
                 body: JSON.stringify({
                     companyId: payload.companyId,
-                    accountNo: payload.accountNo || '',
+                    accountNo: '',
                     userName: payload.userName,
                     password: payload.password,
                     source: payload.source
@@ -408,6 +408,64 @@ export const apiService = {
                 success: false,
                 message: 'Unable to refresh token at the moment.'
             };
+        }
+    },
+
+    async listRagDocuments(companyId: string): Promise<RagDocument[] | null> {
+        try {
+            const params = new URLSearchParams({ companyId });
+            const res = await fetch(`${API_BASE}/rag/documents?${params.toString()}`, {
+                headers: { accept: 'application/json' }
+            });
+            if (!res.ok) return null;
+            const data = await res.json();
+            return Array.isArray(data?.documents) ? data.documents : [];
+        } catch (err) {
+            console.warn('[rag] list documents failed', err);
+            return null;
+        }
+    },
+
+    async uploadRagDocument(file: File, options: { companyId: string; uploadedBy?: string }): Promise<RagDocument | null> {
+        try {
+            const formData = new FormData();
+            formData.append('companyId', options.companyId);
+            formData.append('uploadedBy', options.uploadedBy || '');
+            formData.append('file', file);
+
+            const res = await fetch(`${API_BASE}/rag/documents`, {
+                method: 'POST',
+                body: formData,
+                headers: { accept: 'application/json' }
+            });
+            if (!res.ok) {
+                let message = `Upload failed with HTTP ${res.status}`;
+                try {
+                    const payload = await res.json();
+                    message = payload?.detail || payload?.message || message;
+                } catch {
+                    // Keep HTTP fallback.
+                }
+                throw new Error(message);
+            }
+            return await res.json();
+        } catch (err) {
+            console.error('[rag] upload document failed', err);
+            throw err;
+        }
+    },
+
+    async deleteRagDocument(documentId: string, companyId: string): Promise<boolean> {
+        try {
+            const params = new URLSearchParams({ companyId });
+            const res = await fetch(`${API_BASE}/rag/documents/${encodeURIComponent(documentId)}?${params.toString()}`, {
+                method: 'DELETE',
+                headers: { accept: 'application/json' }
+            });
+            return res.ok;
+        } catch (err) {
+            console.warn('[rag] delete document failed', err);
+            return false;
         }
     },
 
