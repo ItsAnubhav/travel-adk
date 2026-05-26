@@ -245,6 +245,7 @@ const FALLBACK_TOOL_RECORDS = [
   { id: 'get_user_preferences', name: 'Get user preferences', description: 'Loads durable travel preferences for the active user.', kind: 'builtin', status: 'enabled' },
   { id: 'suggest_user_preference', name: 'Suggest user preference', description: 'Creates a pending preference when a user states a durable travel preference.', kind: 'builtin', status: 'enabled' },
   { id: 'search_company_documents', name: 'Search company documents', description: 'Searches uploaded company HR, holiday, policy, and manual documents.', kind: 'builtin', status: 'enabled' },
+  { id: 'flight_search_tool', name: 'Flight search', description: 'Opens the flight search UI with route, date, passenger, cabin, and carrier criteria.', kind: 'builtin', status: 'enabled' },
   { id: 'list_trip', name: 'List trips', description: 'Lists Travog trips visible to the authenticated user.', kind: 'builtin', status: 'enabled' },
   { id: 'get_trip_approvers', name: 'Get trip approvers', description: 'Fetches approvers for a Travog trip.', kind: 'builtin', status: 'enabled' },
   { id: 'send_trip_for_approval', name: 'Send trip for approval', description: 'Submits a trip to selected approvers.', kind: 'builtin', status: 'enabled' },
@@ -713,6 +714,7 @@ const AdminPage: React.FC<AdminPageProps> = ({ loginPayload, embedMode = false }
   }, [richResults]);
 
   const seenResultIdsRef = useRef<Set<string>>(new Set());
+  const resultAutoOpenReadyRef = useRef(false);
 
   useEffect(() => {
     const seen = seenResultIdsRef.current;
@@ -720,10 +722,19 @@ const AdminPage: React.FC<AdminPageProps> = ({ loginPayload, embedMode = false }
     newOnes.forEach((r) => seen.add(r.id));
 
     // Only Result View is user-facing enough to auto-open. Avoid yanking focus
-    // for older results restored from local/session history.
+    // for older results restored from local/session history, but do open for
+    // fresh tool UI artifacts even when they attach to an older assistant row.
     const now = Date.now();
     const hasFreshResult = newOnes.some((r) => now - r.timestamp.getTime() < 4000);
-    if (hasFreshResult) {
+    const shouldAutoOpen =
+      newOnes.length > 0 &&
+      (resultAutoOpenReadyRef.current || hasFreshResult);
+
+    if (!resultAutoOpenReadyRef.current) {
+      resultAutoOpenReadyRef.current = true;
+    }
+
+    if (shouldAutoOpen) {
       setView('result');
       setResultOpen(true);
     }

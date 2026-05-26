@@ -37,6 +37,7 @@ const CSS = `
 }
 .ff-test.embedded {
   height: 100%;
+  min-height: 0;
 }
 .ff-test *, .ff-test *::before, .ff-test *::after { box-sizing: border-box; }
 .ff-test::-webkit-scrollbar { width: 10px; }
@@ -56,6 +57,10 @@ const CSS = `
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+.ff-test.embedded .ff-chat-panel {
+  min-height: 100%;
+  padding: 0;
 }
 
 /* PROGRESS BAR */

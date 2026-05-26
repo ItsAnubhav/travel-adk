@@ -230,6 +230,11 @@ class ControlPlane:
                 name="Search company documents",
                 description="Searches uploaded company policy, HR, holiday, and manual documents.",
             ),
+            "flight_search_tool": ToolRecord(
+                id="flight_search_tool",
+                name="Flight search",
+                description="Opens the flight search UI with route, date, passenger, cabin, and carrier criteria.",
+            ),
             "list_trip": ToolRecord(
                 id="list_trip",
                 name="List trips",
