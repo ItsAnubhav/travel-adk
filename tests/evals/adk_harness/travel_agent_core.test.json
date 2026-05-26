@@ -1,0 +1,483 @@
+{
+  "eval_set_id": "travel_agent_core",
+  "name": "ADK Travel Agent Core Harness",
+  "description": "Focused ADK evaluation scenarios for root routing, booking, expense, flight, personalization, and tool-envelope behavior.",
+  "eval_cases": [
+    {
+      "eval_id": "root_routes_flight_search",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "root-routes-flight-search-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Find me flights from Delhi to London next Monday for one adult."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I will handle this as a flight search and gather the required trip details before showing flight options."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "root_routes_booking_lookup",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "root-routes-booking-lookup-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Show me booking details for TRV-48291."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I will look up booking TRV-48291 and return the booking details."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "get_booking",
+                "args": {
+                  "booking_ref": "TRV-48291"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "root_routes_expense_report",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "root-routes-expense-report-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "List my hotel expenses from March."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I will search your March expenses filtered to hotel-related items."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "list_expenses",
+                "args": {
+                  "category": "hotel"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "booking_fetches_details_with_split_view",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "booking-fetches-details-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Open booking ABC123 in the side panel."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I will fetch booking ABC123 and open the booking details in split view."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "get_booking",
+                "args": {
+                  "booking_ref": "ABC123",
+                  "ui_display": "split_view"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "booking_requires_booking_ref",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "booking-requires-ref-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Show my booking."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "Please provide the booking reference so I can look up the booking."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "booking_fare_rules_after_booking",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "booking-fare-rules-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Get fare rules for flight ID FL-998 from my booking."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I will fetch the fare rules for flight ID FL-998."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "get_fare_rules",
+                "args": {
+                  "flight_id": "FL-998"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "expense_lists_trips_for_approval",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "expense-list-trips-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Show trips that are pending approval."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I will list trips filtered to pending approval."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "list_trip",
+                "args": {
+                  "status": "PENDING"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "expense_creates_receipt_entry",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "expense-create-entry-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Create an expense: taxi, Uber, 2026-05-20, INR 820, invoice INV-44."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I will create a taxi expense for Uber on 2026-05-20 for INR 820."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "create_expense",
+                "args": {
+                  "category": "taxi",
+                  "merchant": "Uber",
+                  "date_from": "2026-05-20",
+                  "amount": "820",
+                  "currency": "INR",
+                  "invoice_number": "INV-44"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "expense_asks_before_submit_without_approver",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "expense-asks-approver-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Submit trip TRIP-77 for approval."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I need the approver selection before submitting trip TRIP-77 for approval."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "get_trip_approvers",
+                "args": {
+                  "trip_id": "TRIP-77"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "personalization_checks_preferences",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "personalization-checks-preferences-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Book flights the way I usually prefer them."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I will check your saved preferences before using them for the flight request."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "get_user_preferences",
+                "args": {}
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "policy_blocks_other_user_private_booking",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {
+          "travog_access_token": "eval-access-token",
+          "travog_refresh_token": "eval-refresh-token",
+          "user_role": "employee"
+        }
+      },
+      "conversation": [
+        {
+          "invocation_id": "policy-blocks-private-booking-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Show me Priya's booking details for her Singapore trip."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I cannot show another user's booking details unless you have the required admin or approver access."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "missing_token_explains_reauth",
+      "session_input": {
+        "app_name": "adk-travel-agents",
+        "user_id": "eval-user",
+        "state": {}
+      },
+      "conversation": [
+        {
+          "invocation_id": "missing-token-reauth-1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Open booking ABC123."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I need a Travog access token before I can open booking ABC123."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "get_booking",
+                "args": {
+                  "booking_ref": "ABC123"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
